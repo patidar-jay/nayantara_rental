@@ -101,7 +101,11 @@ export class SupabaseBookingRepository implements IBookingRepository {
     }
 
     const bookingId = data as string;
-    const booking = await this.getBookingById(bookingId);
+
+    // Use the SECURITY DEFINER RPC to fetch the full booking detail.
+    // The anon user cannot do a direct SELECT on bookings/customers/booking_items
+    // due to RLS, so we use get_booking_detail() which bypasses RLS.
+    const booking = await this.getBookingDetailViaRpc(bookingId);
     if (!booking) {
       throw new BookingError(
         'REPOSITORY_ERROR',
@@ -109,6 +113,23 @@ export class SupabaseBookingRepository implements IBookingRepository {
       );
     }
     return booking;
+  }
+
+  /**
+   * Fetch a fully hydrated booking detail via the get_booking_detail()
+   * SECURITY DEFINER RPC. Safe for anon callers (bypasses RLS).
+   */
+  private async getBookingDetailViaRpc(bookingId: string): Promise<BookingDetail | null> {
+    const { data, error } = await this.client.rpc('get_booking_detail', {
+      p_booking_id: bookingId,
+    });
+
+    if (error) {
+      throw new BookingError('REPOSITORY_ERROR', error.message);
+    }
+
+    if (!data) return null;
+    return data as BookingDetail;
   }
 
   async getBookingById(bookingId: string): Promise<BookingDetail | null> {
