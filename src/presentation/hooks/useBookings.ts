@@ -158,28 +158,38 @@ export function useBookingByRef(bookingRef: string | undefined) {
 
 /**
  * Track a booking by reference + phone number for customer verification.
- * Returns the booking only if the phone matches.
+ * Uses the track_booking() SECURITY DEFINER RPC which bypasses RLS
+ * and verifies phone ownership server-side.
  */
+export interface TrackedBooking {
+  booking_id: string;
+  booking_ref: string;
+  status: BookingStatus;
+  total_amount: number;
+  created_at: string;
+  product_name: string;
+  quantity: number;
+  start_date: string;
+  end_date: string;
+}
+
 export function useTrackBooking(bookingRef: string, phone: string) {
   return useQuery({
     queryKey: bookingKeys.tracking(bookingRef, phone),
-    queryFn: async (): Promise<BookingDetail | null> => {
-      const { data, error } = await supabase
-        .from('bookings')
-        .select(BOOKING_DETAIL_SELECT)
-        .eq('booking_ref', bookingRef)
-        .single();
+    queryFn: async (): Promise<TrackedBooking> => {
+      const { data, error } = await supabase.rpc('track_booking', {
+        p_booking_ref: bookingRef,
+        p_phone: phone,
+      });
 
       if (error) throw new Error(error.message);
 
-      const booking = data as BookingDetail;
-
-      // Verify phone matches the customer on this booking
-      if (booking.customer.phone !== phone) {
-        throw new Error('Phone number does not match this booking');
+      const rows = data as TrackedBooking[];
+      if (!rows || rows.length === 0) {
+        throw new Error('Booking not found. Please check your reference and phone number.');
       }
 
-      return booking;
+      return rows[0];
     },
     enabled: !!bookingRef && !!phone,
     retry: false,

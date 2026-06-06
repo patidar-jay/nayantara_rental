@@ -81,7 +81,7 @@ export default function BookingTrackingPage() {
               type="tel"
               value={phoneInput}
               onChange={(e) => setPhoneInput(e.target.value)}
-              placeholder="+91 98765 43210"
+              placeholder="6267178440"
               className="w-full rounded-xl bg-surface-700 border border-white/5 px-4 py-2.5 text-sm text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-500/50 transition-all"
             />
           </div>
@@ -127,9 +127,6 @@ export default function BookingTrackingPage() {
                     <div className={cn('rounded-2xl border p-6 text-center', config.bg)}>
                       <span className="text-3xl block mb-2">{config.emoji}</span>
                       <p className={cn('text-lg font-semibold', config.color)}>{config.label}</p>
-                      <p className="text-xs text-gray-500 mt-1">
-                        Last updated: {formatDate(booking.updated_at)}
-                      </p>
                     </div>
                   );
                 })()}
@@ -144,11 +141,19 @@ export default function BookingTrackingPage() {
                       <dd className="text-brand-400 font-mono font-medium">{booking.booking_ref}</dd>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <dt className="text-gray-400">Customer</dt>
-                      <dd className="text-white">{booking.customer.full_name}</dd>
+                      <dt className="text-gray-400">Product</dt>
+                      <dd className="text-white">{booking.product_name}</dd>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <dt className="text-gray-400">Created</dt>
+                      <dt className="text-gray-400">Dates</dt>
+                      <dd className="text-white">{formatDate(booking.start_date)} → {formatDate(booking.end_date)}</dd>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <dt className="text-gray-400">Quantity</dt>
+                      <dd className="text-white">{booking.quantity} unit(s)</dd>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <dt className="text-gray-400">Booked On</dt>
                       <dd className="text-white">{formatDate(booking.created_at)}</dd>
                     </div>
                     <div className="flex justify-between text-sm border-t border-white/5 pt-3">
@@ -157,26 +162,6 @@ export default function BookingTrackingPage() {
                     </div>
                   </dl>
                 </div>
-
-                {/* Booking Items */}
-                {booking.items.length > 0 && (
-                  <div className="rounded-2xl bg-surface-800 p-6">
-                    <h3 className="text-base font-semibold text-white mb-4">Items</h3>
-                    <div className="space-y-3">
-                      {booking.items.map((item) => (
-                        <div key={item.id} className="flex items-center justify-between py-3 border-b border-white/5 last:border-0">
-                          <div>
-                            <p className="text-sm font-medium text-white">{item.product.name}</p>
-                            <p className="text-xs text-gray-500">
-                              {formatDate(item.start_date)} → {formatDate(item.end_date)} · {item.quantity} unit(s)
-                            </p>
-                          </div>
-                          <p className="text-sm font-semibold text-white">{formatCurrency(item.subtotal)}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
             )}
           </div>
