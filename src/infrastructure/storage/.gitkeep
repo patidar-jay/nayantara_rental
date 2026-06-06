@@ -1,0 +1,2 @@
+// Infrastructure layer — Storage adapters
+// Abstractions over Supabase Storage, with future support for Cloudflare R2 / Cloudinary.

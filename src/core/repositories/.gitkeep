@@ -1,0 +1,2 @@
+// Core layer — Repository interfaces (ports)
+// Define abstract interfaces here that the infrastructure layer implements.

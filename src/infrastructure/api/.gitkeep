@@ -1,0 +1,2 @@
+// Infrastructure layer — Supabase client and service implementations
+// Concrete implementations of core repository interfaces using Supabase.

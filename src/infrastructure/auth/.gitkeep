@@ -1,0 +1,2 @@
+// Infrastructure layer — Authentication
+// Supabase Auth integration for admin login, session handling, and protected routes.
