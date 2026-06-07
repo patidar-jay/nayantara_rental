@@ -7,6 +7,7 @@ import { useProducts, useDeleteProduct, useCategories } from '@hooks';
 import type { ProductWithCategory, ProductStatus } from '@core/entities';
 import { useToast } from '@presentation/shared/Toast';
 import { formatCurrency, cn } from '@utils';
+import ProductFormModal from '../components/ProductFormModal';
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -65,6 +66,8 @@ export default function ProductManagementPage() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [currentPage, setCurrentPage] = useState(1);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<ProductWithCategory | null>(null);
 
   const { data: categories } = useCategories();
   const deleteProduct = useDeleteProduct();
@@ -107,7 +110,7 @@ export default function ProductManagementPage() {
         </div>
         <button
           type="button"
-          onClick={() => console.log('Add Product clicked — modal coming soon')}
+          onClick={() => { setEditingProduct(null); setModalOpen(true); }}
           className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-text shadow-lg shadow-primary/20 hover:opacity-90 transition-all"
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
@@ -200,7 +203,7 @@ export default function ProductManagementPage() {
                       <td className="px-6 py-4"><StatusBadge status={product.status} /></td>
                       <td className="px-6 py-4">
                         <div className="flex items-center justify-end gap-2">
-                          <button type="button" onClick={() => console.log('Edit:', product.id)} className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-text-muted hover:bg-surface hover:text-text transition-all">
+                          <button type="button" onClick={() => { setEditingProduct(product); setModalOpen(true); }} className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-text-muted hover:bg-surface hover:text-text transition-all">
                             Edit
                           </button>
                           <button type="button" onClick={() => handleDelete(product)} disabled={deleteProduct.isPending} className="inline-flex items-center gap-1.5 rounded-lg border border-red-500/20 px-3 py-1.5 text-xs font-medium text-red-400 hover:bg-red-500/10 disabled:opacity-50 transition-all">
@@ -236,7 +239,7 @@ export default function ProductManagementPage() {
                     <span className="text-text-muted text-xs">Qty: {product.total_quantity}</span>
                   </div>
                   <div className="flex items-center gap-2 pt-1">
-                    <button type="button" onClick={() => console.log('Edit:', product.id)} className="flex-1 inline-flex items-center justify-center rounded-lg border border-border px-3 py-2 text-xs font-medium text-text-muted hover:bg-surface transition-all">Edit</button>
+                    <button type="button" onClick={() => { setEditingProduct(product); setModalOpen(true); }} className="flex-1 inline-flex items-center justify-center rounded-lg border border-border px-3 py-2 text-xs font-medium text-text-muted hover:bg-surface transition-all">Edit</button>
                     <button type="button" onClick={() => handleDelete(product)} disabled={deleteProduct.isPending} className="flex-1 inline-flex items-center justify-center rounded-lg border border-red-500/20 px-3 py-2 text-xs font-medium text-red-400 hover:bg-red-500/10 disabled:opacity-50 transition-all">Delete</button>
                   </div>
                 </div>
@@ -272,6 +275,13 @@ export default function ProductManagementPage() {
           </div>
         )}
       </div>
+
+      {/* Product Add/Edit Modal */}
+      <ProductFormModal
+        isOpen={modalOpen}
+        onClose={() => { setModalOpen(false); setEditingProduct(null); }}
+        product={editingProduct}
+      />
     </div>
   );
 }

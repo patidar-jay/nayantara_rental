@@ -50,3 +50,12 @@ export {
   useDeleteCategory,
   categoryKeys,
 } from './useCategories';
+
+// Media Upload
+export {
+  useProductMedia,
+  useUploadMedia,
+  useDeleteMedia,
+  useMultiUpload,
+  mediaKeys,
+} from './useMediaUpload';
