@@ -39,6 +39,7 @@ const BRAND_PRESETS: ColorPreset[] = [
 ];
 
 const BG_PRESETS: ColorPreset[] = [
+  // Dark
   { name: 'Midnight',      hex: '#0a0a0f' },
   { name: 'Dark Navy',     hex: '#0a0e1a' },
   { name: 'Deep Space',    hex: '#0d0d12' },
@@ -51,6 +52,20 @@ const BG_PRESETS: ColorPreset[] = [
   { name: 'Carbon',        hex: '#181818' },
   { name: 'Dark Olive',    hex: '#0e1210' },
   { name: 'Warm Black',    hex: '#1a1410' },
+  // Medium
+  { name: 'Graphite',      hex: '#1e1e2e' },
+  { name: 'Dark Gray',     hex: '#252525' },
+  { name: 'Storm',         hex: '#2d2d3d' },
+  // Light
+  { name: 'White',         hex: '#ffffff' },
+  { name: 'Snow',          hex: '#fafafa' },
+  { name: 'Pearl',         hex: '#f5f5f5' },
+  { name: 'Ivory',         hex: '#f8f7f2' },
+  { name: 'Light Gray',    hex: '#f0f0f0' },
+  { name: 'Cream',         hex: '#fdf6e3' },
+  { name: 'Lavender',      hex: '#f0eef6' },
+  { name: 'Ice Blue',      hex: '#eff6ff' },
+  { name: 'Mint',          hex: '#f0fdf4' },
 ];
 
 // ---------------------------------------------------------------------------

@@ -101,9 +101,23 @@ function generatePalette(hex: string): Record<string, string> {
   return palette;
 }
 
-/** Generate surface shades from a background hex (dark theme). */
+/** Generate surface shades from a background hex. Auto-detects light vs dark. */
 function generateSurfaces(hex: string): Record<string, string> {
-  const [h, s] = hexToHsl(hex);
+  const [h, s, l] = hexToHsl(hex);
+  const isLight = l > 0.5;
+
+  if (isLight) {
+    // Light theme: 950 = lightest (page bg), 600 = darkest (borders/accents)
+    return {
+      '950': hslToHex(h, s, Math.min(l, 0.98)),
+      '900': hslToHex(h, s, Math.min(l - 0.03, 0.95)),
+      '800': hslToHex(h, s, Math.min(l - 0.07, 0.92)),
+      '700': hslToHex(h, s, Math.min(l - 0.12, 0.87)),
+      '600': hslToHex(h, s, Math.min(l - 0.18, 0.80)),
+    };
+  }
+
+  // Dark theme
   return {
     '950': hslToHex(h, s, 0.04),
     '900': hslToHex(h, s, 0.07),
