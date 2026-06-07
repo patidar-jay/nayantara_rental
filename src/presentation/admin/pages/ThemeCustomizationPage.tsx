@@ -102,6 +102,16 @@ export default function ThemeCustomizationPage() {
   const [bgHex, setBgHex] = useState(colors.background);
   const [brandInput, setBrandInput] = useState(colors.brand);
   const [bgInput, setBgInput] = useState(colors.background);
+  const [brandSearch, setBrandSearch] = useState('');
+  const [bgSearch, setBgSearch] = useState('');
+
+  const filteredBrandPresets = brandSearch.trim()
+    ? BRAND_PRESETS.filter((p) => p.name.toLowerCase().includes(brandSearch.toLowerCase()))
+    : BRAND_PRESETS;
+
+  const filteredBgPresets = bgSearch.trim()
+    ? BG_PRESETS.filter((p) => p.name.toLowerCase().includes(bgSearch.toLowerCase()))
+    : BG_PRESETS;
 
   const isValidHex = (hex: string) => /^#[0-9a-fA-F]{6}$/.test(hex);
 
@@ -230,47 +240,70 @@ export default function ThemeCustomizationPage() {
         </div>
 
         <div className="p-6 space-y-5">
-          {/* Hex Input */}
-          <div className="flex items-center gap-3 max-w-xs">
-            <div className="relative">
-              <input
-                type="color"
-                value={brandHex}
-                onChange={(e) => handleBrandSelect(e.target.value)}
-                className="h-10 w-10 rounded-lg border border-white/10 cursor-pointer bg-transparent"
-              />
+          {/* Inputs Row */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex items-center gap-3 flex-1 max-w-xs">
+              <div className="relative">
+                <input
+                  type="color"
+                  value={brandHex}
+                  onChange={(e) => handleBrandSelect(e.target.value)}
+                  className="h-10 w-10 rounded-lg border border-white/10 cursor-pointer bg-transparent"
+                />
+              </div>
+              <div className="flex-1">
+                <label className="block text-[10px] font-medium text-gray-500 mb-1 uppercase tracking-wider">
+                  Color Code
+                </label>
+                <input
+                  type="text"
+                  value={brandInput}
+                  onChange={(e) => handleBrandInputChange(e.target.value)}
+                  placeholder="#4c6ef5"
+                  maxLength={7}
+                  className={cn(
+                    'w-full rounded-lg bg-surface-700 border px-3 py-2 text-sm font-mono text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 transition-all',
+                    isValidHex(brandInput) ? 'border-white/5 focus:ring-brand-500/50' : 'border-red-500/50 focus:ring-red-500/50'
+                  )}
+                />
+              </div>
             </div>
-            <div className="flex-1">
+            <div className="flex-1 max-w-xs">
               <label className="block text-[10px] font-medium text-gray-500 mb-1 uppercase tracking-wider">
-                Color Code
+                Search by Name
               </label>
-              <input
-                type="text"
-                value={brandInput}
-                onChange={(e) => handleBrandInputChange(e.target.value)}
-                placeholder="#4c6ef5"
-                maxLength={7}
-                className={cn(
-                  'w-full rounded-lg bg-surface-700 border px-3 py-2 text-sm font-mono text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 transition-all',
-                  isValidHex(brandInput) ? 'border-white/5 focus:ring-brand-500/50' : 'border-red-500/50 focus:ring-red-500/50'
-                )}
-              />
+              <div className="relative">
+                <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+                <input
+                  type="text"
+                  value={brandSearch}
+                  onChange={(e) => setBrandSearch(e.target.value)}
+                  placeholder="e.g. Red, Teal, Violet..."
+                  className="w-full rounded-lg bg-surface-700 border border-white/5 pl-9 pr-3 py-2 text-sm text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-500/50 transition-all"
+                />
+              </div>
             </div>
           </div>
 
           {/* Color Grid */}
           <div>
-            <p className="text-xs font-medium text-gray-400 mb-3">Preset Colors</p>
-            <div className="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-9 gap-1">
-              {BRAND_PRESETS.map((preset) => (
-                <ColorSwatch
-                  key={preset.hex}
-                  preset={preset}
-                  isSelected={brandHex.toLowerCase() === preset.hex.toLowerCase()}
-                  onClick={() => handleBrandSelect(preset.hex)}
-                />
-              ))}
-            </div>
+            <p className="text-xs font-medium text-gray-400 mb-3">
+              {brandSearch.trim() ? `Matching "${brandSearch}" — ${filteredBrandPresets.length} found` : 'Preset Colors'}
+            </p>
+            {filteredBrandPresets.length > 0 ? (
+              <div className="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-9 gap-1">
+                {filteredBrandPresets.map((preset) => (
+                  <ColorSwatch
+                    key={preset.hex}
+                    preset={preset}
+                    isSelected={brandHex.toLowerCase() === preset.hex.toLowerCase()}
+                    onClick={() => { handleBrandSelect(preset.hex); setBrandSearch(''); }}
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-600 py-4 text-center">No colors match "{brandSearch}". Try another name or use the color picker.</p>
+            )}
           </div>
         </div>
       </div>
@@ -288,47 +321,70 @@ export default function ThemeCustomizationPage() {
         </div>
 
         <div className="p-6 space-y-5">
-          {/* Hex Input */}
-          <div className="flex items-center gap-3 max-w-xs">
-            <div className="relative">
-              <input
-                type="color"
-                value={bgHex}
-                onChange={(e) => handleBgSelect(e.target.value)}
-                className="h-10 w-10 rounded-lg border border-white/10 cursor-pointer bg-transparent"
-              />
+          {/* Inputs Row */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex items-center gap-3 flex-1 max-w-xs">
+              <div className="relative">
+                <input
+                  type="color"
+                  value={bgHex}
+                  onChange={(e) => handleBgSelect(e.target.value)}
+                  className="h-10 w-10 rounded-lg border border-white/10 cursor-pointer bg-transparent"
+                />
+              </div>
+              <div className="flex-1">
+                <label className="block text-[10px] font-medium text-gray-500 mb-1 uppercase tracking-wider">
+                  Color Code
+                </label>
+                <input
+                  type="text"
+                  value={bgInput}
+                  onChange={(e) => handleBgInputChange(e.target.value)}
+                  placeholder="#0a0a0f"
+                  maxLength={7}
+                  className={cn(
+                    'w-full rounded-lg bg-surface-700 border px-3 py-2 text-sm font-mono text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 transition-all',
+                    isValidHex(bgInput) ? 'border-white/5 focus:ring-brand-500/50' : 'border-red-500/50 focus:ring-red-500/50'
+                  )}
+                />
+              </div>
             </div>
-            <div className="flex-1">
+            <div className="flex-1 max-w-xs">
               <label className="block text-[10px] font-medium text-gray-500 mb-1 uppercase tracking-wider">
-                Color Code
+                Search by Name
               </label>
-              <input
-                type="text"
-                value={bgInput}
-                onChange={(e) => handleBgInputChange(e.target.value)}
-                placeholder="#0a0a0f"
-                maxLength={7}
-                className={cn(
-                  'w-full rounded-lg bg-surface-700 border px-3 py-2 text-sm font-mono text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 transition-all',
-                  isValidHex(bgInput) ? 'border-white/5 focus:ring-brand-500/50' : 'border-red-500/50 focus:ring-red-500/50'
-                )}
-              />
+              <div className="relative">
+                <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+                <input
+                  type="text"
+                  value={bgSearch}
+                  onChange={(e) => setBgSearch(e.target.value)}
+                  placeholder="e.g. Midnight, Charcoal..."
+                  className="w-full rounded-lg bg-surface-700 border border-white/5 pl-9 pr-3 py-2 text-sm text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-500/50 transition-all"
+                />
+              </div>
             </div>
           </div>
 
           {/* Color Grid */}
           <div>
-            <p className="text-xs font-medium text-gray-400 mb-3">Preset Backgrounds</p>
-            <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-1">
-              {BG_PRESETS.map((preset) => (
-                <ColorSwatch
-                  key={preset.hex}
-                  preset={preset}
-                  isSelected={bgHex.toLowerCase() === preset.hex.toLowerCase()}
-                  onClick={() => handleBgSelect(preset.hex)}
-                />
-              ))}
-            </div>
+            <p className="text-xs font-medium text-gray-400 mb-3">
+              {bgSearch.trim() ? `Matching "${bgSearch}" — ${filteredBgPresets.length} found` : 'Preset Backgrounds'}
+            </p>
+            {filteredBgPresets.length > 0 ? (
+              <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-1">
+                {filteredBgPresets.map((preset) => (
+                  <ColorSwatch
+                    key={preset.hex}
+                    preset={preset}
+                    isSelected={bgHex.toLowerCase() === preset.hex.toLowerCase()}
+                    onClick={() => { handleBgSelect(preset.hex); setBgSearch(''); }}
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-600 py-4 text-center">No backgrounds match "{bgSearch}". Try another name or use the color picker.</p>
+            )}
           </div>
         </div>
       </div>
