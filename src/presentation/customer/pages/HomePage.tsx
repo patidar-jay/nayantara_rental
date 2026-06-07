@@ -19,8 +19,8 @@ const BENEFITS = [
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
       </svg>
     ),
-    title: 'Verified Equipment',
-    description: 'Every piece of equipment is professionally maintained and quality-checked before each rental.',
+    title: 'Premium Collection',
+    description: 'Every dress is professionally dry-cleaned, inspected, and perfectly maintained before each rental.',
   },
   {
     icon: (
@@ -29,7 +29,7 @@ const BENEFITS = [
       </svg>
     ),
     title: 'Doorstep Delivery',
-    description: 'Free pickup and delivery within city limits. We handle logistics so you can focus on your event.',
+    description: 'Free pickup and delivery within city limits. Try on at home and look your best for every occasion.',
   },
   {
     icon: (
@@ -52,15 +52,18 @@ const BENEFITS = [
 ];
 
 const CATEGORY_EMOJIS: Record<string, string> = {
-  cameras: '📷',
-  projectors: '📽️',
-  'sound-systems': '🔊',
-  generators: '⚡',
-  tents: '⛺',
-  'party-equipment': '🎉',
-  lighting: '💡',
-  'construction-tools': '🔧',
-  machinery: '🏗️',
+  'lehenga': '👗',
+  'saree': '🥻',
+  'gown': '✨',
+  'sherwani': '🤵',
+  'suit': '👔',
+  'bridal': '💍',
+  'kids': '🧒',
+  'accessories': '👜',
+  'jewellery': '💎',
+  'western': '👠',
+  'ethnic': '🪷',
+  'party-wear': '🎉',
 };
 
 // ---------------------------------------------------------------------------
@@ -98,13 +101,13 @@ export default function HomePage() {
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white leading-tight">
-            Rent Premium Equipment
+            Rent Designer Dresses
             <br />
             <span className="gradient-text">for Every Occasion</span>
           </h1>
 
           <p className="mt-6 max-w-2xl mx-auto text-lg text-gray-400 leading-relaxed">
-            From professional cameras to party tents — get high-quality rental equipment delivered to your doorstep. Simple booking, transparent pricing.
+            From bridal lehengas to party gowns — rent stunning outfits delivered to your doorstep. Look your best without buying. Simple booking, transparent pricing.
           </p>
 
           {/* CTAs */}
@@ -113,7 +116,7 @@ export default function HomePage() {
               to="/products"
               className="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-8 py-3.5 text-sm font-semibold text-white hover:bg-brand-500 transition-all hover:shadow-lg hover:shadow-brand-600/25"
             >
-              Browse Equipment
+              Browse Collection
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
               </svg>
@@ -133,8 +136,8 @@ export default function HomePage() {
               <p className="text-xs text-gray-500 mt-1">Happy Customers</p>
             </div>
             <div>
-              <p className="text-2xl sm:text-3xl font-bold text-white">50+</p>
-              <p className="text-xs text-gray-500 mt-1">Products</p>
+              <p className="text-2xl sm:text-3xl font-bold text-white">200+</p>
+              <p className="text-xs text-gray-500 mt-1">Dresses</p>
             </div>
             <div>
               <p className="text-2xl sm:text-3xl font-bold text-white">4.9★</p>
@@ -152,7 +155,7 @@ export default function HomePage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-white">Browse by Category</h2>
             <p className="mt-3 text-gray-500 max-w-lg mx-auto">
-              Find the perfect equipment for your needs
+              Find the perfect outfit for your occasion
             </p>
           </div>
 
@@ -193,8 +196,8 @@ export default function HomePage() {
               <div className="inline-flex items-center gap-2 rounded-full bg-accent-500/10 border border-accent-500/20 px-3 py-1 mb-3">
                 <span className="text-xs font-medium text-accent-400">⭐ Featured</span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white">Popular Equipment</h2>
-              <p className="mt-2 text-gray-500">Most rented items this month</p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-white">Trending Outfits</h2>
+              <p className="mt-2 text-gray-500">Most rented dresses this month</p>
             </div>
             <Link
               to="/products"
@@ -237,7 +240,7 @@ export default function HomePage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-white">Why Choose Nayantara?</h2>
             <p className="mt-3 text-gray-500 max-w-lg mx-auto">
-              We make renting equipment easy, reliable, and affordable.
+              We make renting designer outfits easy, reliable, and affordable.
             </p>
           </div>
 
@@ -276,14 +279,14 @@ export default function HomePage() {
                 Ready to Rent?
               </h2>
               <p className="mt-4 text-lg text-white/80 max-w-lg mx-auto">
-                Get in touch or browse our catalog to find the perfect equipment.
+                Get in touch or browse our collection to find your perfect outfit.
               </p>
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link
                   to="/products"
                   className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-brand-700 hover:bg-white/90 transition-colors"
                 >
-                  Browse Equipment
+                  Browse Collection
                 </Link>
                 <a
                   href="tel:+919876543210"

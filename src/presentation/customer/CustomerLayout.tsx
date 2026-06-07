@@ -160,7 +160,7 @@ function Footer() {
               </span>
             </Link>
             <p className="mt-4 text-sm text-gray-500 leading-relaxed max-w-xs">
-              Premium rental equipment for every occasion. Cameras, projectors, sound systems & more.
+              Premium dress rentals for every occasion. Lehengas, sarees, gowns, sherwanis & more.
             </p>
           </div>
 
