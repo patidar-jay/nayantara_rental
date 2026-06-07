@@ -161,16 +161,38 @@ export class BookingService {
       );
     }
 
-    // 3. Create atomically. New bookings always start as `pending`.
-    return this.repository.createBooking({
-      customer,
-      booking_ref: BookingService.generateBookingRef(),
-      product_id: product.id,
-      start_date: startDate,
-      end_date: endDate,
-      quantity,
-      notes: notes ?? null,
-    });
+    // 3. Create atomically with retry for booking ref collisions.
+    //    New bookings always start as `pending`.
+    const MAX_REF_RETRIES = 3;
+    for (let attempt = 0; attempt < MAX_REF_RETRIES; attempt++) {
+      try {
+        return await this.repository.createBooking({
+          customer,
+          booking_ref: BookingService.generateBookingRef(),
+          product_id: product.id,
+          start_date: startDate,
+          end_date: endDate,
+          quantity,
+          notes: notes ?? null,
+        });
+      } catch (err) {
+        if (
+          err instanceof BookingError &&
+          err.code === 'DUPLICATE_BOOKING_REF' &&
+          attempt < MAX_REF_RETRIES - 1
+        ) {
+          // Retry with a new reference
+          continue;
+        }
+        throw err;
+      }
+    }
+
+    // Unreachable, but satisfies TypeScript
+    throw new BookingError(
+      'REPOSITORY_ERROR',
+      'Failed to generate a unique booking reference after multiple attempts',
+    );
   }
 
   // --------------------------------------------------------------------------

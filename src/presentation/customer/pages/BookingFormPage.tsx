@@ -18,7 +18,10 @@ import type { BookingDetail } from '@core/entities';
 
 const customerSchema = z.object({
   full_name: z.string().min(2, 'Name is required'),
-  phone: z.string().min(10, 'Valid phone number required'),
+  phone: z.string().min(10, 'Valid phone number required').regex(
+    /^[+]?[\d\s-]{10,15}$/,
+    'Please enter a valid phone number',
+  ),
   email: z.string().email('Invalid email').optional().or(z.literal('')),
   address: z.string().min(5, 'Address is required'),
   notes: z.string().optional(),

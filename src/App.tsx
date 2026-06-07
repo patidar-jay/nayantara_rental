@@ -7,6 +7,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ToastProvider } from '@presentation/shared/Toast';
 import { ThemeProvider } from '@presentation/shared/ThemeContext';
+import ErrorBoundary from '@presentation/shared/ErrorBoundary';
+import { AuthProvider } from '@infrastructure/auth/AuthContext';
+import RequireAuth from '@infrastructure/auth/RequireAuth';
 
 // Customer
 import CustomerLayout from './presentation/customer/CustomerLayout';
@@ -18,6 +21,7 @@ import BookingTrackingPage from './presentation/customer/pages/BookingTrackingPa
 
 // Admin
 import AdminLayout from './presentation/admin/AdminLayout';
+import AdminLoginPage from './presentation/admin/pages/AdminLoginPage';
 import DashboardOverview from './presentation/admin/pages/DashboardOverview';
 import ProductManagementPage from './presentation/admin/pages/ProductManagementPage';
 import CategoryManagementPage from './presentation/admin/pages/CategoryManagementPage';
@@ -45,7 +49,9 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
+    <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
+      <AuthProvider>
       <ThemeProvider>
       <ToastProvider>
       <BrowserRouter>
@@ -62,9 +68,18 @@ function App() {
           </Route>
 
           {/* ============================================================== */}
-          {/* Admin Routes — TODO: Wrap with auth guard                      */}
+          {/* Admin Login (public)                                            */}
           {/* ============================================================== */}
-          <Route path="/admin" element={<AdminLayout />}>
+          <Route path="/admin/login" element={<AdminLoginPage />} />
+
+          {/* ============================================================== */}
+          {/* Admin Routes — Protected by RequireAuth                         */}
+          {/* ============================================================== */}
+          <Route path="/admin" element={
+            <RequireAuth>
+              <AdminLayout />
+            </RequireAuth>
+          }>
             <Route index element={<DashboardOverview />} />
             <Route path="products" element={<ProductManagementPage />} />
             <Route path="categories" element={<CategoryManagementPage />} />
@@ -91,7 +106,9 @@ function App() {
       </BrowserRouter>
       </ToastProvider>
       </ThemeProvider>
+      </AuthProvider>
     </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 

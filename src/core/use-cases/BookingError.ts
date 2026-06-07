@@ -13,6 +13,7 @@ export type BookingErrorCode =
   | 'INSUFFICIENT_AVAILABILITY'
   | 'INVALID_STATUS_TRANSITION'
   | 'BOOKING_NOT_FOUND'
+  | 'DUPLICATE_BOOKING_REF'
   | 'REPOSITORY_ERROR';
 
 export class BookingError extends Error {
@@ -45,6 +46,18 @@ export class BookingError extends Error {
         const detail = message.slice(code.length).replace(/^[:\s]+/, '');
         return new BookingError(code, detail || message);
       }
+    }
+
+    // Handle Postgres unique constraint violation on booking_ref
+    if (
+      message.includes('duplicate key') ||
+      message.includes('unique constraint') ||
+      message.includes('booking_ref')
+    ) {
+      return new BookingError(
+        'DUPLICATE_BOOKING_REF',
+        'A booking reference collision occurred. Please try again.',
+      );
     }
 
     return new BookingError('REPOSITORY_ERROR', message);

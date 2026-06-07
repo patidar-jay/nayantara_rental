@@ -6,6 +6,7 @@
 import { useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@utils';
+import { useAuth } from '@infrastructure/auth/AuthContext';
 
 // ---------------------------------------------------------------------------
 // Sidebar Navigation Items
@@ -78,6 +79,7 @@ function Sidebar({
   onClose: () => void;
 }) {
   const { pathname } = useLocation();
+  const { signOut, user } = useAuth();
 
   const isActive = (path: string) => {
     if (path === '/admin') return pathname === '/admin';
@@ -165,9 +167,9 @@ function Sidebar({
           <button
             type="button"
             className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-text-muted hover:bg-red-500/10 hover:text-red-400 transition-all"
-            onClick={() => {
-              // TODO: Connect to auth sign-out
-              console.log('Sign out clicked');
+            onClick={async () => {
+              await signOut();
+              window.location.href = '/admin/login';
             }}
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -187,6 +189,7 @@ function Sidebar({
 
 function TopHeader({ onMenuToggle }: { onMenuToggle: () => void }) {
   const { pathname } = useLocation();
+  const { user } = useAuth();
 
   // Derive page title from path
   const pageTitle = (() => {
@@ -235,11 +238,11 @@ function TopHeader({ onMenuToggle }: { onMenuToggle: () => void }) {
         {/* Admin avatar */}
         <div className="flex items-center gap-2.5 pl-3 border-l border-border">
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-primary text-xs font-bold">
-            A
+            {(user?.email ?? 'A').charAt(0).toUpperCase()}
           </div>
           <div className="hidden sm:block">
             <p className="text-sm font-medium text-text leading-none">Admin</p>
-            <p className="text-[11px] text-text-muted leading-none mt-0.5">admin@nayantara.com</p>
+            <p className="text-[11px] text-text-muted leading-none mt-0.5">{user?.email ?? '—'}</p>
           </div>
         </div>
       </div>
