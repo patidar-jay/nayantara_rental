@@ -82,8 +82,8 @@ export default function HomePage() {
       <section className="relative overflow-hidden py-20 sm:py-32">
         {/* Background decoration */}
         <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-b from-brand-950/50 via-surface-950 to-surface-950" />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-brand-600/8 rounded-full blur-3xl" />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-background to-background" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-primary/8 rounded-full blur-3xl" />
           <div
             className="absolute inset-0 opacity-[0.03]"
             style={{
@@ -95,18 +95,18 @@ export default function HomePage() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 rounded-full bg-brand-600/10 border border-brand-500/20 px-4 py-1.5 mb-8">
-            <span className="h-1.5 w-1.5 rounded-full bg-brand-400 pulse-soft" />
-            <span className="text-xs font-medium text-brand-400">Trusted by 500+ customers</span>
+          <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-4 py-1.5 mb-8">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary pulse-soft" />
+            <span className="text-xs font-medium text-primary">Trusted by 500+ customers</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white leading-tight">
+          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-text leading-tight">
             Rent Designer Dresses
             <br />
             <span className="gradient-text">for Every Occasion</span>
           </h1>
 
-          <p className="mt-6 max-w-2xl mx-auto text-lg text-gray-400 leading-relaxed">
+          <p className="mt-6 max-w-2xl mx-auto text-lg text-text-muted leading-relaxed">
             From bridal lehengas to party gowns — rent stunning outfits delivered to your doorstep. Look your best without buying. Simple booking, transparent pricing.
           </p>
 
@@ -114,7 +114,7 @@ export default function HomePage() {
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to="/products"
-              className="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-8 py-3.5 text-sm font-semibold text-white hover:bg-brand-500 transition-all hover:shadow-lg hover:shadow-brand-600/25"
+              className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-3.5 text-sm font-semibold text-text hover:opacity-90 transition-all hover:shadow-lg hover:shadow-primary/25"
             >
               Browse Collection
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -123,7 +123,7 @@ export default function HomePage() {
             </Link>
             <Link
               to="/track"
-              className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-8 py-3.5 text-sm font-semibold text-gray-300 hover:bg-white/5 hover:text-white transition-all"
+              className="inline-flex items-center gap-2 rounded-xl border border-border px-8 py-3.5 text-sm font-semibold text-text-muted hover:bg-surface hover:text-text transition-all"
             >
               Track Your Booking
             </Link>
@@ -132,16 +132,16 @@ export default function HomePage() {
           {/* Stats */}
           <div className="mt-16 grid grid-cols-3 gap-8 max-w-md mx-auto">
             <div>
-              <p className="text-2xl sm:text-3xl font-bold text-white">500+</p>
-              <p className="text-xs text-gray-500 mt-1">Happy Customers</p>
+              <p className="text-2xl sm:text-3xl font-bold text-text">500+</p>
+              <p className="text-xs text-text-muted mt-1">Happy Customers</p>
             </div>
             <div>
-              <p className="text-2xl sm:text-3xl font-bold text-white">200+</p>
-              <p className="text-xs text-gray-500 mt-1">Dresses</p>
+              <p className="text-2xl sm:text-3xl font-bold text-text">200+</p>
+              <p className="text-xs text-text-muted mt-1">Dresses</p>
             </div>
             <div>
-              <p className="text-2xl sm:text-3xl font-bold text-white">4.9★</p>
-              <p className="text-xs text-gray-500 mt-1">Avg Rating</p>
+              <p className="text-2xl sm:text-3xl font-bold text-text">4.9★</p>
+              <p className="text-xs text-text-muted mt-1">Avg Rating</p>
             </div>
           </div>
         </div>
@@ -150,11 +150,11 @@ export default function HomePage() {
       {/* ================================================================== */}
       {/* Categories Section                                                   */}
       {/* ================================================================== */}
-      <section className="py-20 bg-surface-950">
+      <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white">Browse by Category</h2>
-            <p className="mt-3 text-gray-500 max-w-lg mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-bold text-text">Browse by Category</h2>
+            <p className="mt-3 text-text-muted max-w-lg mx-auto">
               Find the perfect outfit for your occasion
             </p>
           </div>
@@ -162,7 +162,7 @@ export default function HomePage() {
           {loadingCategories ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
               {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="rounded-2xl bg-surface-800 p-6 text-center skeleton h-32" />
+                <div key={i} className="rounded-2xl bg-surface p-6 text-center skeleton h-32" />
               ))}
             </div>
           ) : (
@@ -171,12 +171,12 @@ export default function HomePage() {
                 <Link
                   key={cat.id}
                   to={`/products?category=${cat.slug}`}
-                  className="group rounded-2xl bg-surface-800 p-6 text-center hover:bg-surface-700 transition-all card-lift"
+                  className="group rounded-2xl bg-surface p-6 text-center hover:bg-surface transition-all card-lift"
                 >
                   <span className="text-3xl block mb-3">
                     {CATEGORY_EMOJIS[cat.slug] ?? '📦'}
                   </span>
-                  <h3 className="text-sm font-semibold text-white group-hover:text-brand-400 transition-colors">
+                  <h3 className="text-sm font-semibold text-text group-hover:text-primary transition-colors">
                     {cat.name}
                   </h3>
                 </Link>
@@ -189,19 +189,19 @@ export default function HomePage() {
       {/* ================================================================== */}
       {/* Featured Products                                                    */}
       {/* ================================================================== */}
-      <section className="py-20 bg-surface-900/50">
+      <section className="py-20 bg-background/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-12">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full bg-accent-500/10 border border-accent-500/20 px-3 py-1 mb-3">
                 <span className="text-xs font-medium text-accent-400">⭐ Featured</span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white">Trending Outfits</h2>
-              <p className="mt-2 text-gray-500">Most rented dresses this month</p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-text">Trending Outfits</h2>
+              <p className="mt-2 text-text-muted">Most rented dresses this month</p>
             </div>
             <Link
               to="/products"
-              className="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-brand-400 hover:text-brand-300 transition-colors"
+              className="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary transition-colors"
             >
               View all
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -224,7 +224,7 @@ export default function HomePage() {
           <div className="mt-8 text-center sm:hidden">
             <Link
               to="/products"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-400 hover:text-brand-300 transition-colors"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary transition-colors"
             >
               View all products →
             </Link>
@@ -235,11 +235,11 @@ export default function HomePage() {
       {/* ================================================================== */}
       {/* Benefits Section                                                     */}
       {/* ================================================================== */}
-      <section className="py-20 bg-surface-950">
+      <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white">Why Choose Nayantara?</h2>
-            <p className="mt-3 text-gray-500 max-w-lg mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-bold text-text">Why Choose Nayantara?</h2>
+            <p className="mt-3 text-text-muted max-w-lg mx-auto">
               We make renting designer outfits easy, reliable, and affordable.
             </p>
           </div>
@@ -248,13 +248,13 @@ export default function HomePage() {
             {BENEFITS.map((b) => (
               <div
                 key={b.title}
-                className="rounded-2xl bg-surface-800 p-6 transition-all hover:bg-surface-700/60"
+                className="rounded-2xl bg-surface p-6 transition-all hover:bg-surface/60"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-600/15 text-brand-400 mb-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/15 text-primary mb-4">
                   {b.icon}
                 </div>
-                <h3 className="text-base font-semibold text-white mb-2">{b.title}</h3>
-                <p className="text-sm text-gray-400 leading-relaxed">{b.description}</p>
+                <h3 className="text-base font-semibold text-text mb-2">{b.title}</h3>
+                <p className="text-sm text-text-muted leading-relaxed">{b.description}</p>
               </div>
             ))}
           </div>
@@ -266,7 +266,7 @@ export default function HomePage() {
       {/* ================================================================== */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-600 to-brand-800 px-8 py-16 sm:px-16 text-center">
+          <div className="relative overflow-hidden rounded-3xl bg-primary px-8 py-16 sm:px-16 text-center">
             <div
               className="absolute inset-0 opacity-10"
               style={{
@@ -275,22 +275,22 @@ export default function HomePage() {
               }}
             />
             <div className="relative z-10">
-              <h2 className="text-3xl sm:text-4xl font-bold text-white">
+              <h2 className="text-3xl sm:text-4xl font-bold text-text">
                 Ready to Rent?
               </h2>
-              <p className="mt-4 text-lg text-white/80 max-w-lg mx-auto">
+              <p className="mt-4 text-lg text-text/80 max-w-lg mx-auto">
                 Get in touch or browse our collection to find your perfect outfit.
               </p>
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link
                   to="/products"
-                  className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-brand-700 hover:bg-white/90 transition-colors"
+                  className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-background hover:bg-surface transition-colors"
                 >
                   Browse Collection
                 </Link>
                 <a
                   href="tel:+919876543210"
-                  className="inline-flex items-center gap-2 rounded-xl border border-white/30 px-8 py-3.5 text-sm font-semibold text-white hover:bg-white/10 transition-colors"
+                  className="inline-flex items-center gap-2 rounded-xl border border-border px-8 py-3.5 text-sm font-semibold text-text hover:bg-surface transition-colors"
                 >
                   📞 Call Us
                 </a>

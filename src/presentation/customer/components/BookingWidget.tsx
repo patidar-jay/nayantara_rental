@@ -127,15 +127,15 @@ function BookingWidget({
   // -------------------------------------------------------------------------
 
   return (
-    <div className="glass rounded-xl bg-surface-800 p-6">
+    <div className="glass rounded-xl bg-surface p-6">
       {/* --- Header --- */}
       <div className="mb-5">
-        <p className="text-sm text-gray-400">Rental price</p>
+        <p className="text-sm text-text-muted">Rental price</p>
         <div className="mt-1 flex items-baseline gap-1.5">
-          <span className="text-2xl font-bold text-white">
+          <span className="text-2xl font-bold text-text">
             {formatCurrency(product.rental_price_per_day)}
           </span>
-          <span className="text-sm text-gray-500">/ day</span>
+          <span className="text-sm text-text-muted">/ day</span>
         </div>
       </div>
 
@@ -147,7 +147,7 @@ function BookingWidget({
           <div>
             <label
               htmlFor="start_date"
-              className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-gray-400"
+              className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-text-muted"
             >
               Start Date
             </label>
@@ -157,10 +157,10 @@ function BookingWidget({
               min={getTodayISO()}
               {...register('start_date')}
               className={cn(
-                'w-full rounded-lg bg-surface-700 px-3 py-2.5 text-sm text-white',
+                'w-full rounded-lg bg-surface px-3 py-2.5 text-sm text-text',
                 'outline-none transition-all duration-200',
-                'focus:ring-2 focus:ring-brand-500 focus:ring-offset-0',
-                'placeholder:text-gray-500',
+                'focus:ring-2 focus:ring-primary focus:ring-offset-0',
+                'placeholder:text-text-muted',
                 errors.start_date && 'ring-2 ring-error-500'
               )}
             />
@@ -175,7 +175,7 @@ function BookingWidget({
           <div>
             <label
               htmlFor="end_date"
-              className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-gray-400"
+              className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-text-muted"
             >
               End Date
             </label>
@@ -185,10 +185,10 @@ function BookingWidget({
               min={startDate || getTodayISO()}
               {...register('end_date')}
               className={cn(
-                'w-full rounded-lg bg-surface-700 px-3 py-2.5 text-sm text-white',
+                'w-full rounded-lg bg-surface px-3 py-2.5 text-sm text-text',
                 'outline-none transition-all duration-200',
-                'focus:ring-2 focus:ring-brand-500 focus:ring-offset-0',
-                'placeholder:text-gray-500',
+                'focus:ring-2 focus:ring-primary focus:ring-offset-0',
+                'placeholder:text-text-muted',
                 errors.end_date && 'ring-2 ring-error-500'
               )}
             />
@@ -204,7 +204,7 @@ function BookingWidget({
         <div>
           <label
             htmlFor="quantity"
-            className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-gray-400"
+            className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-text-muted"
           >
             Quantity
           </label>
@@ -215,9 +215,9 @@ function BookingWidget({
             max={availability?.available_quantity ?? product.total_quantity}
             {...register('quantity', { valueAsNumber: true })}
             className={cn(
-              'w-full rounded-lg bg-surface-700 px-3 py-2.5 text-sm text-white',
+              'w-full rounded-lg bg-surface px-3 py-2.5 text-sm text-text',
               'outline-none transition-all duration-200',
-              'focus:ring-2 focus:ring-brand-500 focus:ring-offset-0',
+              'focus:ring-2 focus:ring-primary focus:ring-offset-0',
               errors.quantity && 'ring-2 ring-error-500'
             )}
           />
@@ -248,40 +248,40 @@ function BookingWidget({
 
         {/* --- Rental Summary --- */}
         {totalDays > 0 && (
-          <div className="space-y-2.5 border-t border-dotted border-surface-600 pt-4">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+          <div className="space-y-2.5 border-t border-dotted border-border pt-4">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-text-muted">
               Rental Summary
             </h4>
 
             {/* Price / Day */}
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-400">Price / Day</span>
-              <span className="text-white">
+              <span className="text-text-muted">Price / Day</span>
+              <span className="text-text">
                 {formatCurrency(product.rental_price_per_day)}
               </span>
             </div>
 
             {/* Total Days */}
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-400">Total Days</span>
-              <span className="text-white">{totalDays}</span>
+              <span className="text-text-muted">Total Days</span>
+              <span className="text-text">{totalDays}</span>
             </div>
 
             {/* Quantity */}
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-400">Quantity</span>
-              <span className="text-white">&times; {quantity || 1}</span>
+              <span className="text-text-muted">Quantity</span>
+              <span className="text-text">&times; {quantity || 1}</span>
             </div>
 
             {/* Divider */}
-            <div className="border-t border-dotted border-surface-600" />
+            <div className="border-t border-dotted border-border" />
 
             {/* Total */}
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-300">
+              <span className="text-sm font-medium text-text-muted">
                 Total Rent
               </span>
-              <span className="text-lg font-bold text-white">
+              <span className="text-lg font-bold text-text">
                 {formatCurrency(totalRent)}
               </span>
             </div>
@@ -297,11 +297,11 @@ function BookingWidget({
               onClick={handleCheckAvailability}
               disabled={isCheckingAvailability || !startDate || !endDate}
               className={cn(
-                'w-full rounded-lg border border-surface-600 px-4 py-2.5',
-                'text-sm font-medium text-gray-300',
+                'w-full rounded-lg border border-border px-4 py-2.5',
+                'text-sm font-medium text-text-muted',
                 'transition-all duration-200',
-                'hover:border-brand-500/40 hover:text-white',
-                'focus:outline-none focus:ring-2 focus:ring-brand-500/50',
+                'hover:border-primary/40 hover:text-text',
+                'focus:outline-none focus:ring-2 focus:ring-primary/40',
                 'disabled:cursor-not-allowed disabled:opacity-50'
               )}
             >
@@ -340,12 +340,12 @@ function BookingWidget({
             type="submit"
             disabled={isBookingDisabled}
             className={cn(
-              'w-full rounded-lg bg-brand-600 px-4 py-3',
-              'text-sm font-semibold text-white',
+              'w-full rounded-lg bg-primary px-4 py-3',
+              'text-sm font-semibold text-text',
               'transition-all duration-200',
-              'hover:bg-brand-500 hover:shadow-lg hover:shadow-brand-600/25',
-              'focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 focus:ring-offset-surface-800',
-              'disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-brand-600 disabled:hover:shadow-none'
+              'hover:opacity-90 hover:shadow-lg hover:shadow-primary/25',
+              'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface',
+              'disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:opacity-90 disabled:hover:shadow-none'
             )}
           >
             Book Now

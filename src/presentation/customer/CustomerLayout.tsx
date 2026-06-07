@@ -30,11 +30,11 @@ function Header() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-600 text-white font-bold text-sm transition-transform group-hover:scale-110">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-background font-bold text-sm transition-transform group-hover:scale-110">
             N
           </div>
-          <span className="text-lg font-bold text-white tracking-tight">
-            Nayantara<span className="text-brand-400"> Rentals</span>
+          <span className="text-lg font-bold text-text tracking-tight">
+            Nayantara<span className="text-primary"> Rentals</span>
           </span>
         </Link>
 
@@ -47,8 +47,8 @@ function Header() {
               className={cn(
                 'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
                 pathname === link.path
-                  ? 'text-white bg-white/10'
-                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+                  ? 'text-text bg-border'
+                  : 'text-text-muted hover:text-text hover:bg-border/50'
               )}
             >
               {link.label}
@@ -60,7 +60,7 @@ function Header() {
         <div className="hidden md:flex items-center gap-3">
           <Link
             to="/products"
-            className="rounded-lg bg-brand-600 px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-brand-500 hover:shadow-lg hover:shadow-brand-600/25"
+            className="rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-background transition-all hover:opacity-90 hover:shadow-lg hover:shadow-primary/25"
           >
             Browse Rentals
           </Link>
@@ -74,15 +74,15 @@ function Header() {
           aria-label="Toggle menu"
         >
           <span className={cn(
-            'block h-0.5 w-6 bg-white transition-all duration-300',
+            'block h-0.5 w-6 bg-text transition-all duration-300',
             mobileOpen && 'translate-y-2 rotate-45'
           )} />
           <span className={cn(
-            'block h-0.5 w-6 bg-white transition-all duration-300',
+            'block h-0.5 w-6 bg-text transition-all duration-300',
             mobileOpen && 'opacity-0'
           )} />
           <span className={cn(
-            'block h-0.5 w-6 bg-white transition-all duration-300',
+            'block h-0.5 w-6 bg-text transition-all duration-300',
             mobileOpen && '-translate-y-2 -rotate-45'
           )} />
         </button>
@@ -102,8 +102,8 @@ function Header() {
               className={cn(
                 'px-4 py-3 rounded-lg text-sm font-medium transition-colors',
                 pathname === link.path
-                  ? 'text-white bg-white/10'
-                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+                  ? 'text-text bg-border'
+                  : 'text-text-muted hover:text-text hover:bg-border/50'
               )}
             >
               {link.label}
@@ -112,7 +112,7 @@ function Header() {
           <Link
             to="/products"
             onClick={() => setMobileOpen(false)}
-            className="mt-2 rounded-lg bg-brand-600 px-4 py-3 text-center text-sm font-semibold text-white transition-all hover:bg-brand-500"
+            className="mt-2 rounded-lg bg-primary px-4 py-3 text-center text-sm font-semibold text-background transition-all hover:opacity-90"
           >
             Browse Rentals
           </Link>
@@ -146,20 +146,20 @@ const FOOTER_LINKS = {
 
 function Footer() {
   return (
-    <footer className="border-t border-white/5 bg-surface-950">
+    <footer className="border-t border-border bg-background">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           {/* Brand Column */}
           <div className="col-span-2 md:col-span-1">
             <Link to="/" className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-600 text-white font-bold text-sm">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-background font-bold text-sm">
                 N
               </div>
-              <span className="text-lg font-bold text-white tracking-tight">
+              <span className="text-lg font-bold text-text tracking-tight">
                 Nayantara
               </span>
             </Link>
-            <p className="mt-4 text-sm text-gray-500 leading-relaxed max-w-xs">
+            <p className="mt-4 text-sm text-text-muted leading-relaxed max-w-xs">
               Premium dress rentals for every occasion. Lehengas, sarees, gowns, sherwanis & more.
             </p>
           </div>
@@ -167,13 +167,13 @@ function Footer() {
           {/* Link Columns */}
           {Object.entries(FOOTER_LINKS).map(([title, links]) => (
             <div key={title}>
-              <h4 className="text-sm font-semibold text-white mb-4">{title}</h4>
+              <h4 className="text-sm font-semibold text-text mb-4">{title}</h4>
               <ul className="space-y-3">
                 {links.map((link) => (
                   <li key={link.label}>
                     <Link
                       to={link.path}
-                      className="text-sm text-gray-500 hover:text-brand-400 transition-colors"
+                      className="text-sm text-text-muted hover:text-primary transition-colors"
                     >
                       {link.label}
                     </Link>
@@ -185,8 +185,8 @@ function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-gray-600">
+        <div className="mt-12 border-t border-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-text-muted">
             © {new Date().getFullYear()} Nayantara Rentals. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
@@ -196,7 +196,7 @@ function Footer() {
                 key={name}
                 href="#"
                 aria-label={name}
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-gray-500 hover:bg-brand-600/20 hover:text-brand-400 transition-colors"
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-surface text-text-muted hover:opacity-90/20 hover:text-primary transition-colors"
               >
                 <span className="text-xs font-bold">{name[0]}</span>
               </a>
@@ -214,7 +214,7 @@ function Footer() {
 
 export default function CustomerLayout() {
   return (
-    <div className="min-h-screen bg-surface-950 text-white">
+    <div className="min-h-screen bg-background text-text">
       <Header />
       <main className="pt-16">
         <Outlet />

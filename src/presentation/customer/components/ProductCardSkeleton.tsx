@@ -9,7 +9,7 @@
 
 export function ProductCardSkeleton() {
   return (
-    <div className="rounded-2xl overflow-hidden bg-surface-800">
+    <div className="rounded-2xl overflow-hidden bg-surface">
       {/* Image area placeholder */}
       <div className="skeleton aspect-[4/3] rounded-none" />
 

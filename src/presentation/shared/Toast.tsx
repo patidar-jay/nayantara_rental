@@ -92,11 +92,11 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: (id: string)
       <span className={cn('flex h-6 w-6 items-center justify-center rounded-lg text-xs font-bold flex-shrink-0', color.icon)}>
         {ICONS[toast.type]}
       </span>
-      <p className="text-sm text-white flex-1">{toast.message}</p>
+      <p className="text-sm text-text flex-1">{toast.message}</p>
       <button
         type="button"
         onClick={() => { setExiting(true); setTimeout(() => onDismiss(toast.id), 300); }}
-        className="text-gray-500 hover:text-white transition-colors flex-shrink-0"
+        className="text-text-muted hover:text-text transition-colors flex-shrink-0"
         aria-label="Dismiss"
       >
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

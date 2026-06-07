@@ -97,23 +97,23 @@ export default function AvailabilityCalendar() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">Availability Calendar</h1>
-        <p className="mt-1 text-sm text-gray-500">View real-time equipment availability by date</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-text tracking-tight">Availability Calendar</h1>
+        <p className="mt-1 text-sm text-text-muted">View real-time equipment availability by date</p>
       </div>
 
       {/* Product Selector */}
-      <div className="rounded-2xl bg-surface-800 p-5">
-        <label htmlFor="product_select" className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">Select Product</label>
+      <div className="rounded-2xl bg-surface p-5">
+        <label htmlFor="product_select" className="block text-xs font-medium text-text-muted mb-2 uppercase tracking-wider">Select Product</label>
         {loadingProducts ? (
           <div className="h-10 w-full skeleton rounded-xl" />
         ) : products.length === 0 ? (
-          <p className="text-sm text-gray-500">No active products found.</p>
+          <p className="text-sm text-text-muted">No active products found.</p>
         ) : (
           <select
             id="product_select"
             value={selectedProductId}
             onChange={(e) => { setSelectedProductId(e.target.value); setSelectedDay(null); }}
-            className="w-full rounded-xl bg-surface-700 border border-white/5 px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500/50 transition-all cursor-pointer appearance-none"
+            className="w-full rounded-xl bg-surface border border-border px-4 py-2.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all cursor-pointer appearance-none"
             style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E")`,
               backgroundRepeat: 'no-repeat',
@@ -130,16 +130,16 @@ export default function AvailabilityCalendar() {
 
       {/* Calendar */}
       {selectedProductId && (
-        <div className="rounded-2xl bg-surface-800 p-5 sm:p-6">
+        <div className="rounded-2xl bg-surface p-5 sm:p-6">
           {/* Month Navigation */}
           <div className="flex items-center justify-between mb-6">
-            <button type="button" onClick={handlePrevMonth} className="rounded-lg bg-surface-700 px-3 py-2 text-sm text-gray-400 hover:bg-surface-600 hover:text-white transition-all">
+            <button type="button" onClick={handlePrevMonth} className="rounded-lg bg-surface px-3 py-2 text-sm text-text-muted hover:bg-surface hover:text-text transition-all">
               ← Prev
             </button>
-            <h3 className="text-lg font-semibold text-white">
+            <h3 className="text-lg font-semibold text-text">
               {MONTHS[month]} {year}
             </h3>
-            <button type="button" onClick={handleNextMonth} className="rounded-lg bg-surface-700 px-3 py-2 text-sm text-gray-400 hover:bg-surface-600 hover:text-white transition-all">
+            <button type="button" onClick={handleNextMonth} className="rounded-lg bg-surface px-3 py-2 text-sm text-text-muted hover:bg-surface hover:text-text transition-all">
               Next →
             </button>
           </div>
@@ -147,7 +147,7 @@ export default function AvailabilityCalendar() {
           {/* Day Headers */}
           <div className="grid grid-cols-7 gap-1 mb-2">
             {DAYS_OF_WEEK.map((day) => (
-              <div key={day} className="text-center text-xs font-medium text-gray-500 py-2">{day}</div>
+              <div key={day} className="text-center text-xs font-medium text-text-muted py-2">{day}</div>
             ))}
           </div>
 
@@ -162,7 +162,7 @@ export default function AvailabilityCalendar() {
             <div className="grid grid-cols-7 gap-1">
               {calendarGrid.map((day, i) => {
                 if (!day) {
-                  return <div key={`empty-${i}`} className="h-12 sm:h-16 rounded-lg bg-surface-900/50" />;
+                  return <div key={`empty-${i}`} className="h-12 sm:h-16 rounded-lg bg-background/50" />;
                 }
 
                 const dayNum = parseInt(day.date.split('-')[2], 10);
@@ -177,7 +177,7 @@ export default function AvailabilityCalendar() {
                     className={cn(
                       'h-12 sm:h-16 rounded-lg border text-sm font-medium transition-all flex items-center justify-center',
                       colors.bg, colors.border, colors.text,
-                      isSelected ? 'ring-2 ring-brand-500' : 'hover:ring-2 hover:ring-brand-500/40',
+                      isSelected ? 'ring-2 ring-primary' : 'hover:ring-2 hover:ring-primary/40',
                     )}
                   >
                     {dayNum}
@@ -188,7 +188,7 @@ export default function AvailabilityCalendar() {
           )}
 
           {/* Legend */}
-          <div className="flex items-center gap-6 mt-6 pt-4 border-t border-white/5">
+          <div className="flex items-center gap-6 mt-6 pt-4 border-t border-border">
             {[
               { status: 'available' as const, label: 'Available' },
               { status: 'partial' as const, label: 'Partially Booked' },
@@ -196,7 +196,7 @@ export default function AvailabilityCalendar() {
             ].map(({ status, label }) => (
               <div key={status} className="flex items-center gap-2">
                 <div className={cn('h-3 w-3 rounded-sm border', STATUS_COLORS[status].bg, STATUS_COLORS[status].border)} />
-                <span className="text-xs text-gray-400">{label}</span>
+                <span className="text-xs text-text-muted">{label}</span>
               </div>
             ))}
           </div>
@@ -205,32 +205,32 @@ export default function AvailabilityCalendar() {
 
       {/* Day Detail Card */}
       {selectedDay && (
-        <div className="rounded-2xl bg-surface-800 p-6">
-          <h3 className="text-base font-semibold text-white mb-4">
+        <div className="rounded-2xl bg-surface p-6">
+          <h3 className="text-base font-semibold text-text mb-4">
             {selectedProduct?.name} — {selectedDay.date}
           </h3>
           <div className="grid grid-cols-3 gap-4">
-            <div className="rounded-xl bg-surface-700 p-4 text-center">
-              <p className="text-2xl font-bold text-white">{selectedDay.totalQuantity}</p>
-              <p className="text-xs text-gray-500 mt-1">Total Units</p>
+            <div className="rounded-xl bg-surface p-4 text-center">
+              <p className="text-2xl font-bold text-text">{selectedDay.totalQuantity}</p>
+              <p className="text-xs text-text-muted mt-1">Total Units</p>
             </div>
-            <div className="rounded-xl bg-surface-700 p-4 text-center">
+            <div className="rounded-xl bg-surface p-4 text-center">
               <p className="text-2xl font-bold text-yellow-400">{selectedDay.bookedQuantity}</p>
-              <p className="text-xs text-gray-500 mt-1">Booked</p>
+              <p className="text-xs text-text-muted mt-1">Booked</p>
             </div>
-            <div className="rounded-xl bg-surface-700 p-4 text-center">
+            <div className="rounded-xl bg-surface p-4 text-center">
               <p className="text-2xl font-bold text-green-400">{selectedDay.availableQuantity}</p>
-              <p className="text-xs text-gray-500 mt-1">Available</p>
+              <p className="text-xs text-text-muted mt-1">Available</p>
             </div>
           </div>
 
           {/* Capacity Bar */}
           <div className="mt-4">
-            <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+            <div className="flex items-center justify-between text-xs text-text-muted mb-1">
               <span>Utilization</span>
               <span>{selectedDay.totalQuantity > 0 ? Math.round((selectedDay.bookedQuantity / selectedDay.totalQuantity) * 100) : 0}%</span>
             </div>
-            <div className="h-2 rounded-full bg-surface-700 overflow-hidden">
+            <div className="h-2 rounded-full bg-surface overflow-hidden">
               <div
                 className={cn(
                   'h-full rounded-full transition-all duration-500',

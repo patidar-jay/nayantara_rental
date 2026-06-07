@@ -64,15 +64,6 @@ const NAV_ITEMS: NavItem[] = [
       </svg>
     ),
   },
-  {
-    label: 'Theme',
-    path: '/admin/theme',
-    icon: (
-      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z" />
-      </svg>
-    ),
-  },
 ];
 
 // ---------------------------------------------------------------------------
@@ -106,26 +97,26 @@ function Sidebar({
       {/* Sidebar panel */}
       <aside
         className={cn(
-          'fixed top-0 left-0 z-50 h-full w-64 bg-surface-900 border-r border-white/5 flex flex-col transition-transform duration-300 ease-in-out',
+          'fixed top-0 left-0 z-50 h-full w-64 bg-background border-r border-border flex flex-col transition-transform duration-300 ease-in-out',
           'lg:translate-x-0 lg:static lg:z-auto',
           isOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
         {/* Logo */}
-        <div className="flex h-16 items-center justify-between px-5 border-b border-white/5">
+        <div className="flex h-16 items-center justify-between px-5 border-b border-border">
           <Link to="/admin" className="flex items-center gap-2.5" onClick={onClose}>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-white font-bold text-xs">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-text font-bold text-xs">
               N
             </div>
             <div>
-              <span className="text-sm font-bold text-white tracking-tight">Nayantara</span>
-              <span className="block text-[10px] text-gray-500 -mt-0.5 uppercase tracking-widest">Admin Panel</span>
+              <span className="text-sm font-bold text-text tracking-tight">Nayantara</span>
+              <span className="block text-[10px] text-text-muted -mt-0.5 uppercase tracking-widest">Admin Panel</span>
             </div>
           </Link>
           {/* Mobile close */}
           <button
             type="button"
-            className="lg:hidden p-1 text-gray-500 hover:text-white transition-colors"
+            className="lg:hidden p-1 text-text-muted hover:text-text transition-colors"
             onClick={onClose}
             aria-label="Close sidebar"
           >
@@ -145,13 +136,13 @@ function Sidebar({
               className={cn(
                 'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all',
                 isActive(item.path)
-                  ? 'bg-brand-600/15 text-brand-400'
-                  : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                  ? 'bg-primary/15 text-primary'
+                  : 'text-text-muted hover:bg-surface hover:text-text'
               )}
             >
               <span className={cn(
                 'transition-colors',
-                isActive(item.path) ? 'text-brand-400' : 'text-gray-500'
+                isActive(item.path) ? 'text-primary' : 'text-text-muted'
               )}>
                 {item.icon}
               </span>
@@ -161,10 +152,10 @@ function Sidebar({
         </nav>
 
         {/* Bottom Section */}
-        <div className="border-t border-white/5 px-3 py-4">
+        <div className="border-t border-border px-3 py-4">
           <Link
             to="/"
-            className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-500 hover:bg-white/5 hover:text-white transition-all"
+            className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-text-muted hover:bg-surface hover:text-text transition-all"
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
@@ -173,7 +164,7 @@ function Sidebar({
           </Link>
           <button
             type="button"
-            className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-500 hover:bg-red-500/10 hover:text-red-400 transition-all"
+            className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-text-muted hover:bg-red-500/10 hover:text-red-400 transition-all"
             onClick={() => {
               // TODO: Connect to auth sign-out
               console.log('Sign out clicked');
@@ -209,12 +200,12 @@ function TopHeader({ onMenuToggle }: { onMenuToggle: () => void }) {
   })();
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-white/5 bg-surface-950/80 backdrop-blur-xl px-4 sm:px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background/80 backdrop-blur-xl px-4 sm:px-6">
       <div className="flex items-center gap-4">
         {/* Mobile hamburger */}
         <button
           type="button"
-          className="lg:hidden p-2 -ml-2 text-gray-400 hover:text-white transition-colors"
+          className="lg:hidden p-2 -ml-2 text-text-muted hover:text-text transition-colors"
           onClick={onMenuToggle}
           aria-label="Toggle menu"
         >
@@ -223,7 +214,7 @@ function TopHeader({ onMenuToggle }: { onMenuToggle: () => void }) {
           </svg>
         </button>
 
-        <h1 className="text-lg font-semibold text-white">{pageTitle}</h1>
+        <h1 className="text-lg font-semibold text-text">{pageTitle}</h1>
       </div>
 
       {/* Right side */}
@@ -231,24 +222,24 @@ function TopHeader({ onMenuToggle }: { onMenuToggle: () => void }) {
         {/* Notifications placeholder */}
         <button
           type="button"
-          className="relative p-2 text-gray-400 hover:text-white transition-colors"
+          className="relative p-2 text-text-muted hover:text-text transition-colors"
           aria-label="Notifications"
         >
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
           </svg>
           {/* Unread dot */}
-          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-brand-500 pulse-soft" />
+          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary pulse-soft" />
         </button>
 
         {/* Admin avatar */}
-        <div className="flex items-center gap-2.5 pl-3 border-l border-white/10">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-600/20 text-brand-400 text-xs font-bold">
+        <div className="flex items-center gap-2.5 pl-3 border-l border-border">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-primary text-xs font-bold">
             A
           </div>
           <div className="hidden sm:block">
-            <p className="text-sm font-medium text-white leading-none">Admin</p>
-            <p className="text-[11px] text-gray-500 leading-none mt-0.5">admin@nayantara.com</p>
+            <p className="text-sm font-medium text-text leading-none">Admin</p>
+            <p className="text-[11px] text-text-muted leading-none mt-0.5">admin@nayantara.com</p>
           </div>
         </div>
       </div>
@@ -264,7 +255,7 @@ export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-surface-950 text-white flex">
+    <div className="min-h-screen bg-background text-text flex">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <div className="flex-1 flex flex-col min-w-0">

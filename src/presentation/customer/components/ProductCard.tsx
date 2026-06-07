@@ -23,7 +23,7 @@ function CameraIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="h-12 w-12 text-surface-600"
+      className="h-12 w-12 text-text-muted"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -53,8 +53,8 @@ function ProductCard({ product }: ProductCardProps) {
     <Link
       to={`/products/${product.slug}`}
       className={cn(
-        'group block rounded-2xl overflow-hidden bg-surface-800 card-lift',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/60',
+        'group block rounded-2xl overflow-hidden bg-surface card-lift',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40',
       )}
       aria-label={`View details for ${product.name}`}
     >
@@ -71,14 +71,14 @@ function ProductCard({ product }: ProductCardProps) {
           />
         ) : (
           /* Gradient placeholder when no media exists */
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-900 to-surface-800">
+          <div className="flex h-full w-full items-center justify-center bg-surface">
             <CameraIcon />
           </div>
         )}
 
         {/* Category badge (top-left) */}
         {product.category?.name && (
-          <span className="absolute top-3 left-3 glass rounded-full px-3 py-1 text-xs font-medium text-gray-200 select-none">
+          <span className="absolute top-3 left-3 glass rounded-full px-3 py-1 text-xs font-medium text-text-muted select-none">
             {product.category.name}
           </span>
         )}
@@ -89,13 +89,13 @@ function ProductCard({ product }: ProductCardProps) {
       {/* ---------------------------------------------------------------- */}
       <div className="flex flex-col gap-2 p-5">
         {/* Product name */}
-        <h3 className="text-lg font-semibold text-white line-clamp-1">
+        <h3 className="text-lg font-semibold text-text line-clamp-1">
           {product.name}
         </h3>
 
         {/* Truncated description */}
         {product.description && (
-          <p className="text-sm leading-relaxed text-gray-400 line-clamp-2">
+          <p className="text-sm leading-relaxed text-text-muted line-clamp-2">
             {truncate(product.description, 80)}
           </p>
         )}
@@ -103,19 +103,19 @@ function ProductCard({ product }: ProductCardProps) {
         {/* Price + Availability row */}
         <div className="mt-1 flex items-end justify-between">
           <div>
-            <span className="text-xl font-bold text-brand-400">
+            <span className="text-xl font-bold text-primary">
               {formatCurrency(product.rental_price_per_day)}
             </span>
-            <span className="ml-1 text-sm text-gray-500">/day</span>
+            <span className="ml-1 text-sm text-text-muted">/day</span>
           </div>
 
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-text-muted">
             {product.total_quantity} {product.total_quantity === 1 ? 'unit' : 'units'}
           </span>
         </div>
 
         {/* View Details link */}
-        <span className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-brand-400 transition-colors group-hover:text-brand-300">
+        <span className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary transition-colors group-hover:text-primary">
           View Details
           <svg
             xmlns="http://www.w3.org/2000/svg"

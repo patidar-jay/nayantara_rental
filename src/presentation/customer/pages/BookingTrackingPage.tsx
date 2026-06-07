@@ -15,9 +15,9 @@ const STATUS_CONFIG: Record<BookingStatus, { label: string; emoji: string; color
   pending:   { label: 'Pending Review',  emoji: '⏳', color: 'text-yellow-400', bg: 'bg-yellow-500/10 border-yellow-500/20' },
   approved:  { label: 'Approved',        emoji: '✅', color: 'text-blue-400',   bg: 'bg-blue-500/10 border-blue-500/20' },
   delivered: { label: 'Delivered',       emoji: '🚚', color: 'text-green-400',  bg: 'bg-green-500/10 border-green-500/20' },
-  returned:  { label: 'Returned',        emoji: '🔄', color: 'text-gray-400',   bg: 'bg-gray-500/10 border-gray-500/20' },
+  returned:  { label: 'Returned',        emoji: '🔄', color: 'text-text-muted',   bg: 'bg-surface/10 border-border' },
   rejected:  { label: 'Rejected',        emoji: '❌', color: 'text-red-400',    bg: 'bg-red-500/10 border-red-500/20' },
-  cancelled: { label: 'Cancelled',       emoji: '🚫', color: 'text-gray-500',   bg: 'bg-gray-500/10 border-gray-500/20' },
+  cancelled: { label: 'Cancelled',       emoji: '🚫', color: 'text-text-muted',   bg: 'bg-surface/10 border-border' },
 };
 
 // ---------------------------------------------------------------------------
@@ -48,18 +48,18 @@ export default function BookingTrackingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface-950 py-12 sm:py-20">
+    <div className="min-h-screen bg-background py-12 sm:py-20">
       <div className="max-w-2xl mx-auto px-4 sm:px-6">
         {/* Header */}
         <div className="text-center mb-10">
-          <h1 className="text-3xl sm:text-4xl font-bold text-white">Track Your Booking</h1>
-          <p className="mt-3 text-gray-500">Enter your booking reference and phone number to check status.</p>
+          <h1 className="text-3xl sm:text-4xl font-bold text-text">Track Your Booking</h1>
+          <p className="mt-3 text-text-muted">Enter your booking reference and phone number to check status.</p>
         </div>
 
         {/* Search Form */}
-        <form onSubmit={handleSearch} className="rounded-2xl bg-surface-800 p-6 space-y-4">
+        <form onSubmit={handleSearch} className="rounded-2xl bg-surface p-6 space-y-4">
           <div>
-            <label htmlFor="booking_ref" className="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wider">
+            <label htmlFor="booking_ref" className="block text-xs font-medium text-text-muted mb-1.5 uppercase tracking-wider">
               Booking Reference
             </label>
             <input
@@ -68,12 +68,12 @@ export default function BookingTrackingPage() {
               value={refInput}
               onChange={(e) => setRefInput(e.target.value)}
               placeholder="e.g. NYT-LQ7X3A-4F9"
-              className="w-full rounded-xl bg-surface-700 border border-white/5 px-4 py-2.5 text-sm text-white font-mono placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-500/50 transition-all"
+              className="w-full rounded-xl bg-surface border border-border px-4 py-2.5 text-sm text-text font-mono placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
             />
           </div>
 
           <div>
-            <label htmlFor="phone" className="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wider">
+            <label htmlFor="phone" className="block text-xs font-medium text-text-muted mb-1.5 uppercase tracking-wider">
               Phone Number
             </label>
             <input
@@ -82,14 +82,14 @@ export default function BookingTrackingPage() {
               value={phoneInput}
               onChange={(e) => setPhoneInput(e.target.value)}
               placeholder="6267178440"
-              className="w-full rounded-xl bg-surface-700 border border-white/5 px-4 py-2.5 text-sm text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-500/50 transition-all"
+              className="w-full rounded-xl bg-surface border border-border px-4 py-2.5 text-sm text-text placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
             />
           </div>
 
           <button
             type="submit"
             disabled={!refInput.trim() || !phoneInput.trim() || isLoading}
-            className="w-full rounded-xl bg-brand-600 py-3 text-sm font-semibold text-white hover:bg-brand-500 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+            className="w-full rounded-xl bg-primary py-3 text-sm font-semibold text-text hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
           >
             {isLoading ? (
               <>
@@ -132,33 +132,33 @@ export default function BookingTrackingPage() {
                 })()}
 
                 {/* Booking Details */}
-                <div className="rounded-2xl bg-surface-800 p-6">
-                  <h3 className="text-base font-semibold text-white mb-4">Booking Details</h3>
+                <div className="rounded-2xl bg-surface p-6">
+                  <h3 className="text-base font-semibold text-text mb-4">Booking Details</h3>
 
                   <dl className="space-y-3">
                     <div className="flex justify-between text-sm">
-                      <dt className="text-gray-400">Reference</dt>
-                      <dd className="text-brand-400 font-mono font-medium">{booking.booking_ref}</dd>
+                      <dt className="text-text-muted">Reference</dt>
+                      <dd className="text-primary font-mono font-medium">{booking.booking_ref}</dd>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <dt className="text-gray-400">Product</dt>
-                      <dd className="text-white">{booking.product_name}</dd>
+                      <dt className="text-text-muted">Product</dt>
+                      <dd className="text-text">{booking.product_name}</dd>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <dt className="text-gray-400">Dates</dt>
-                      <dd className="text-white">{formatDate(booking.start_date)} → {formatDate(booking.end_date)}</dd>
+                      <dt className="text-text-muted">Dates</dt>
+                      <dd className="text-text">{formatDate(booking.start_date)} → {formatDate(booking.end_date)}</dd>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <dt className="text-gray-400">Quantity</dt>
-                      <dd className="text-white">{booking.quantity} unit(s)</dd>
+                      <dt className="text-text-muted">Quantity</dt>
+                      <dd className="text-text">{booking.quantity} unit(s)</dd>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <dt className="text-gray-400">Booked On</dt>
-                      <dd className="text-white">{formatDate(booking.created_at)}</dd>
+                      <dt className="text-text-muted">Booked On</dt>
+                      <dd className="text-text">{formatDate(booking.created_at)}</dd>
                     </div>
-                    <div className="flex justify-between text-sm border-t border-white/5 pt-3">
-                      <dt className="text-gray-400 font-semibold">Total Amount</dt>
-                      <dd className="text-xl font-bold text-brand-400">{formatCurrency(booking.total_amount)}</dd>
+                    <div className="flex justify-between text-sm border-t border-border pt-3">
+                      <dt className="text-text-muted font-semibold">Total Amount</dt>
+                      <dd className="text-xl font-bold text-primary">{formatCurrency(booking.total_amount)}</dd>
                     </div>
                   </dl>
                 </div>

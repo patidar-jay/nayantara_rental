@@ -29,7 +29,7 @@ export default function ProductDetailsPage() {
   // Loading
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-surface-950 py-8">
+      <div className="min-h-screen bg-background py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-4">
@@ -54,11 +54,11 @@ export default function ProductDetailsPage() {
   // Error
   if (isError || !product) {
     return (
-      <div className="min-h-screen bg-surface-950 flex items-center justify-center text-center px-4">
+      <div className="min-h-screen bg-background flex items-center justify-center text-center px-4">
         <div>
-          <h1 className="text-4xl font-bold text-white">Product Not Found</h1>
-          <p className="mt-3 text-gray-400">{(error as Error)?.message ?? 'This product does not exist.'}</p>
-          <Link to="/products" className="mt-6 inline-block rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white hover:bg-brand-500 transition-colors">
+          <h1 className="text-4xl font-bold text-text">Product Not Found</h1>
+          <p className="mt-3 text-text-muted">{(error as Error)?.message ?? 'This product does not exist.'}</p>
+          <Link to="/products" className="mt-6 inline-block rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-text hover:opacity-90 transition-colors">
             Browse Products
           </Link>
         </div>
@@ -70,30 +70,30 @@ export default function ProductDetailsPage() {
   const currentImage = images[selectedImage]?.media_url ?? null;
 
   return (
-    <div className="min-h-screen bg-surface-950 py-8 sm:py-12">
+    <div className="min-h-screen bg-background py-8 sm:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8">
-          <Link to="/" className="hover:text-white transition-colors">Home</Link>
+        <nav className="flex items-center gap-2 text-sm text-text-muted mb-8">
+          <Link to="/" className="hover:text-text transition-colors">Home</Link>
           <span>/</span>
-          <Link to="/products" className="hover:text-white transition-colors">Products</Link>
+          <Link to="/products" className="hover:text-text transition-colors">Products</Link>
           <span>/</span>
           {product.category && (
             <>
-              <Link to={`/products?category=${product.category.slug}`} className="hover:text-white transition-colors">
+              <Link to={`/products?category=${product.category.slug}`} className="hover:text-text transition-colors">
                 {product.category.name}
               </Link>
               <span>/</span>
             </>
           )}
-          <span className="text-gray-400 truncate">{product.name}</span>
+          <span className="text-text-muted truncate">{product.name}</span>
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column: Images + Details */}
           <div className="lg:col-span-2 space-y-6">
             {/* Main Image */}
-            <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-surface-800">
+            <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-surface">
               {currentImage ? (
                 <img
                   src={currentImage}
@@ -101,8 +101,8 @@ export default function ProductDetailsPage() {
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="h-full w-full bg-gradient-to-br from-brand-900/40 to-surface-800 flex items-center justify-center">
-                  <svg className="h-20 w-20 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={0.5}>
+                <div className="h-full w-full bg-surface flex items-center justify-center">
+                  <svg className="h-20 w-20 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={0.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
                     <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
                   </svg>
@@ -120,7 +120,7 @@ export default function ProductDetailsPage() {
                     onClick={() => setSelectedImage(i)}
                     className={cn(
                       'h-16 w-16 rounded-lg overflow-hidden flex-shrink-0 transition-all',
-                      i === selectedImage ? 'ring-2 ring-brand-500' : 'ring-1 ring-white/10 opacity-60 hover:opacity-100'
+                      i === selectedImage ? 'ring-2 ring-primary' : 'ring-1 ring-border opacity-60 hover:opacity-100'
                     )}
                   >
                     <img src={img.media_url} alt={img.alt_text ?? ''} className="h-full w-full object-cover" />
@@ -132,33 +132,33 @@ export default function ProductDetailsPage() {
             {/* Product Info */}
             <div className="space-y-6">
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-white">{product.name}</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold text-text">{product.name}</h1>
                 {product.category && (
-                  <span className="mt-2 inline-block rounded-full bg-surface-700 px-3 py-1 text-xs font-medium text-gray-300">
+                  <span className="mt-2 inline-block rounded-full bg-surface px-3 py-1 text-xs font-medium text-text-muted">
                     {product.category.name}
                   </span>
                 )}
               </div>
 
               {product.description && (
-                <p className="text-gray-400 leading-relaxed">{product.description}</p>
+                <p className="text-text-muted leading-relaxed">{product.description}</p>
               )}
 
               {/* Specifications */}
               {product.specifications && Object.keys(product.specifications).length > 0 && (
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-4">Specifications</h3>
-                  <div className="rounded-xl bg-surface-800 overflow-hidden">
+                  <h3 className="text-lg font-semibold text-text mb-4">Specifications</h3>
+                  <div className="rounded-xl bg-surface overflow-hidden">
                     {Object.entries(product.specifications).map(([key, value], i) => (
                       <div
                         key={key}
                         className={cn(
                           'flex justify-between px-5 py-3',
-                          i % 2 === 0 ? 'bg-surface-800' : 'bg-surface-700/30'
+                          i % 2 === 0 ? 'bg-surface' : 'bg-surface/30'
                         )}
                       >
-                        <span className="text-sm text-gray-400">{key}</span>
-                        <span className="text-sm text-white font-medium">{value}</span>
+                        <span className="text-sm text-text-muted">{key}</span>
+                        <span className="text-sm text-text font-medium">{value}</span>
                       </div>
                     ))}
                   </div>
@@ -168,8 +168,8 @@ export default function ProductDetailsPage() {
               {/* Video */}
               {product.video_url && (
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-4">Video</h3>
-                  <div className="aspect-video rounded-xl overflow-hidden bg-surface-800">
+                  <h3 className="text-lg font-semibold text-text mb-4">Video</h3>
+                  <div className="aspect-video rounded-xl overflow-hidden bg-surface">
                     <iframe
                       src={product.video_url.replace('watch?v=', 'embed/')}
                       title={product.name}

@@ -15,9 +15,9 @@ const STATUS_STYLES: Record<BookingStatus, { label: string; bg: string; text: st
   pending:   { label: 'Pending',   bg: 'bg-yellow-400/10', text: 'text-yellow-400' },
   approved:  { label: 'Approved',  bg: 'bg-blue-400/10',   text: 'text-blue-400' },
   delivered: { label: 'Delivered', bg: 'bg-green-400/10',  text: 'text-green-400' },
-  returned:  { label: 'Returned',  bg: 'bg-gray-400/10',   text: 'text-gray-400' },
+  returned:  { label: 'Returned',  bg: 'bg-surface',   text: 'text-text-muted' },
   rejected:  { label: 'Rejected',  bg: 'bg-red-400/10',    text: 'text-red-400' },
-  cancelled: { label: 'Cancelled', bg: 'bg-gray-500/10',   text: 'text-gray-500' },
+  cancelled: { label: 'Cancelled', bg: 'bg-surface/10',   text: 'text-text-muted' },
 };
 
 function StatusBadge({ status }: { status: BookingStatus }) {
@@ -45,7 +45,7 @@ interface StatCardProps {
 
 function StatCard({ label, value, icon, trend, color, loading }: StatCardProps) {
   return (
-    <div className="rounded-2xl bg-surface-800 p-5 sm:p-6 transition-all hover:bg-surface-700/60">
+    <div className="rounded-2xl bg-surface p-5 sm:p-6 transition-all hover:bg-surface/60">
       <div className="flex items-start justify-between">
         <div className={cn('flex h-10 w-10 items-center justify-center rounded-xl', color)}>
           {icon}
@@ -63,9 +63,9 @@ function StatCard({ label, value, icon, trend, color, loading }: StatCardProps) 
         {loading ? (
           <div className="h-8 w-20 skeleton rounded-lg" />
         ) : (
-          <p className="text-2xl sm:text-3xl font-bold text-white">{value}</p>
+          <p className="text-2xl sm:text-3xl font-bold text-text">{value}</p>
         )}
-        <p className="mt-1 text-sm text-gray-500">{label}</p>
+        <p className="mt-1 text-sm text-text-muted">{label}</p>
       </div>
     </div>
   );
@@ -79,11 +79,11 @@ function QuickAction({ label, icon, to }: { label: string; icon: React.ReactNode
   return (
     <Link
       to={to}
-      className="flex items-center gap-3 rounded-xl bg-surface-800 px-4 py-3 text-sm font-medium text-gray-400 hover:bg-surface-700 hover:text-white transition-all"
+      className="flex items-center gap-3 rounded-xl bg-surface px-4 py-3 text-sm font-medium text-text-muted hover:bg-surface hover:text-text transition-all"
     >
-      <span className="text-brand-400">{icon}</span>
+      <span className="text-primary">{icon}</span>
       {label}
-      <svg className="ml-auto h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <svg className="ml-auto h-4 w-4 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
       </svg>
     </Link>
@@ -102,8 +102,8 @@ export default function DashboardOverview() {
     <div className="space-y-8">
       {/* Welcome */}
       <div>
-        <h2 className="text-2xl sm:text-3xl font-bold text-white">Welcome back, Admin</h2>
-        <p className="mt-1 text-gray-500">Here's what's happening with your rental business</p>
+        <h2 className="text-2xl sm:text-3xl font-bold text-text">Welcome back, Admin</h2>
+        <p className="mt-1 text-text-muted">Here's what's happening with your rental business</p>
       </div>
 
       {/* Stats Grid */}
@@ -112,7 +112,7 @@ export default function DashboardOverview() {
           label="Total Products"
           value={stats?.totalProducts ?? 0}
           loading={loadingStats}
-          color="bg-brand-600/15 text-brand-400"
+          color="bg-primary/15 text-primary"
           icon={<svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>}
         />
         <StatCard
@@ -166,16 +166,16 @@ export default function DashboardOverview() {
       {/* Bottom Grid */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         {/* Recent Bookings Table */}
-        <div className="xl:col-span-2 rounded-2xl bg-surface-800 overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-white/5">
-            <h3 className="text-base font-semibold text-white">Recent Bookings</h3>
-            <Link to="/admin/bookings" className="text-xs font-medium text-brand-400 hover:text-brand-300 transition-colors">
+        <div className="xl:col-span-2 rounded-2xl bg-surface overflow-hidden">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-border">
+            <h3 className="text-base font-semibold text-text">Recent Bookings</h3>
+            <Link to="/admin/bookings" className="text-xs font-medium text-primary hover:text-primary transition-colors">
               View all →
             </Link>
           </div>
 
           {loadingBookings ? (
-            <div className="divide-y divide-white/5">
+            <div className="divide-y divide-border">
               {Array.from({ length: 5 }).map((_, i) => (
                 <div key={i} className="px-6 py-4 flex items-center gap-4">
                   <div className="h-4 w-28 skeleton rounded" />
@@ -190,30 +190,30 @@ export default function DashboardOverview() {
               <div className="hidden sm:block overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-white/5">
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reference</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <tr className="border-b border-border">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Reference</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Customer</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Product</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Amount</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-white/5">
+                  <tbody className="divide-y divide-border">
                     {(recentBookings?.data ?? []).map((booking) => (
-                      <tr key={booking.id} className="hover:bg-surface-700/30 transition-colors">
+                      <tr key={booking.id} className="hover:bg-surface/30 transition-colors">
                         <td className="px-6 py-4">
-                          <span className="text-sm font-mono font-medium text-brand-400">{booking.booking_ref}</span>
-                          <p className="text-xs text-gray-600 mt-0.5">{formatDate(booking.created_at)}</p>
+                          <span className="text-sm font-mono font-medium text-primary">{booking.booking_ref}</span>
+                          <p className="text-xs text-text-muted mt-0.5">{formatDate(booking.created_at)}</p>
                         </td>
                         <td className="px-6 py-4">
-                          <p className="text-sm font-medium text-white">{booking.customer.full_name}</p>
-                          <p className="text-xs text-gray-500">{booking.customer.phone}</p>
+                          <p className="text-sm font-medium text-text">{booking.customer.full_name}</p>
+                          <p className="text-xs text-text-muted">{booking.customer.phone}</p>
                         </td>
                         <td className="px-6 py-4">
-                          <p className="text-sm text-gray-300">{booking.items[0]?.product.name ?? '—'}</p>
+                          <p className="text-sm text-text-muted">{booking.items[0]?.product.name ?? '—'}</p>
                         </td>
                         <td className="px-6 py-4">
-                          <p className="text-sm font-semibold text-white">{formatCurrency(booking.total_amount)}</p>
+                          <p className="text-sm font-semibold text-text">{formatCurrency(booking.total_amount)}</p>
                         </td>
                         <td className="px-6 py-4">
                           <StatusBadge status={booking.status} />
@@ -225,24 +225,24 @@ export default function DashboardOverview() {
               </div>
 
               {/* Mobile cards */}
-              <div className="sm:hidden divide-y divide-white/5">
+              <div className="sm:hidden divide-y divide-border">
                 {(recentBookings?.data ?? []).map((booking) => (
                   <div key={booking.id} className="p-4 space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-mono font-medium text-brand-400">{booking.booking_ref}</span>
+                      <span className="text-sm font-mono font-medium text-primary">{booking.booking_ref}</span>
                       <StatusBadge status={booking.status} />
                     </div>
-                    <p className="text-sm text-white">{booking.customer.full_name}</p>
-                    <div className="flex items-center justify-between text-xs text-gray-500">
+                    <p className="text-sm text-text">{booking.customer.full_name}</p>
+                    <div className="flex items-center justify-between text-xs text-text-muted">
                       <span>{booking.items[0]?.product.name ?? '—'}</span>
-                      <span className="font-semibold text-white">{formatCurrency(booking.total_amount)}</span>
+                      <span className="font-semibold text-text">{formatCurrency(booking.total_amount)}</span>
                     </div>
                   </div>
                 ))}
               </div>
 
               {(recentBookings?.data ?? []).length === 0 && (
-                <div className="p-8 text-center text-sm text-gray-500">No bookings yet</div>
+                <div className="p-8 text-center text-sm text-text-muted">No bookings yet</div>
               )}
             </>
           )}
@@ -251,9 +251,9 @@ export default function DashboardOverview() {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Quick Actions */}
-          <div className="rounded-2xl bg-surface-800 overflow-hidden">
-            <div className="px-5 py-4 border-b border-white/5">
-              <h3 className="text-sm font-semibold text-white">Quick Actions</h3>
+          <div className="rounded-2xl bg-surface overflow-hidden">
+            <div className="px-5 py-4 border-b border-border">
+              <h3 className="text-sm font-semibold text-text">Quick Actions</h3>
             </div>
             <div className="p-3 space-y-1">
               <QuickAction

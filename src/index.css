@@ -6,34 +6,15 @@
    ============================================================================ */
 
 @theme {
-  /* Brand Palette */
-  --color-brand-50: #f0f4ff;
-  --color-brand-100: #dbe4ff;
-  --color-brand-200: #bac8ff;
-  --color-brand-300: #91a7ff;
-  --color-brand-400: #748ffc;
-  --color-brand-500: #5c7cfa;
-  --color-brand-600: #4c6ef5;
-  --color-brand-700: #4263eb;
-  --color-brand-800: #3b5bdb;
-  --color-brand-900: #364fc7;
+  /* Core 5-Color Theme System */
+  --color-background: var(--theme-background, #0F0F14);
+  --color-surface: var(--theme-surface, #1A1A24);
+  --color-primary: var(--theme-primary, #C8A96B);
+  --color-text: var(--theme-text, #FFFFFF);
+  --color-border: var(--theme-border, rgba(200,169,107,0.15));
 
-  /* Accent */
-  --color-accent-400: #ffa94d;
-  --color-accent-500: #ff922b;
-  --color-accent-600: #fd7e14;
-
-  /* Success / Error / Warning */
-  --color-success-500: #40c057;
-  --color-error-500: #fa5252;
-  --color-warning-500: #fab005;
-
-  /* Surface (Dark) */
-  --color-surface-950: #0a0a0f;
-  --color-surface-900: #111118;
-  --color-surface-800: #1a1a24;
-  --color-surface-700: #24242f;
-  --color-surface-600: #2e2e3a;
+  /* Derived Text Colors */
+  --color-text-muted: color-mix(in srgb, var(--theme-text, #FFFFFF) 70%, transparent);
 
   /* Font */
   --font-sans: 'Inter', 'system-ui', -apple-system, sans-serif;
@@ -48,6 +29,8 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-background);
+  color: var(--color-text);
 }
 
 /* Glassmorphism utility */
@@ -67,7 +50,7 @@ body {
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #5c7cfa 0%, #748ffc 40%, #ffa94d 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, color-mix(in srgb, var(--color-primary) 80%, white) 40%, var(--color-primary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -89,7 +72,7 @@ body {
   100% { background-position: 200% 0; }
 }
 .skeleton {
-  background: linear-gradient(90deg, #1a1a24 25%, #24242f 50%, #1a1a24 75%);
+  background: linear-gradient(90deg, var(--color-surface) 25%, color-mix(in srgb, var(--color-surface) 80%, white) 50%, var(--color-surface) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
   border-radius: 8px;
@@ -109,12 +92,12 @@ body {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-surface-950);
+  background: var(--color-background);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-surface-600);
+  background: var(--color-surface);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-surface-700);
+  background: color-mix(in srgb, var(--color-surface) 80%, white);
 }

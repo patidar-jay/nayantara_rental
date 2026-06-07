@@ -77,11 +77,11 @@ function App() {
           {/* 404                                                             */}
           {/* ============================================================== */}
           <Route path="*" element={
-            <div className="min-h-screen bg-surface-950 flex items-center justify-center text-center px-4">
+            <div className="min-h-screen bg-background flex items-center justify-center text-center px-4">
               <div>
-                <h1 className="text-6xl font-bold text-brand-400">404</h1>
-                <p className="mt-4 text-xl text-gray-400">Page not found</p>
-                <a href="/" className="mt-6 inline-block rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white hover:bg-brand-500 transition-colors">
+                <h1 className="text-6xl font-bold text-primary">404</h1>
+                <p className="mt-4 text-xl text-text-muted">Page not found</p>
+                <a href="/" className="mt-6 inline-block rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-background hover:opacity-90 transition-opacity">
                   Go Home
                 </a>
               </div>
