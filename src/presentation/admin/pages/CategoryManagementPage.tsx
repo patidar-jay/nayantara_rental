@@ -53,12 +53,17 @@ export default function CategoryManagementPage() {
   };
 
   const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Delete "${name}"? Products in this category may be affected.`)) return;
+    if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
     try {
       await deleteCategory.mutateAsync(id);
       toast.success(`"${name}" deleted`);
     } catch (err) {
-      toast.error((err as Error).message ?? 'Failed to delete category');
+      const message = (err as Error).message ?? '';
+      if (message.includes('foreign key') || message.includes('violates') || message.includes('products_category_id_fkey')) {
+        toast.error(`Cannot delete "${name}" — it still has products assigned. Move or delete the products first.`);
+      } else {
+        toast.error(message || 'Failed to delete category');
+      }
     }
   };
 
