@@ -229,12 +229,12 @@ export default function BookingFormPage() {
 
                 {/* Address */}
                 <div>
-                  <label htmlFor="address" className="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wider">Delivery Address</label>
+                  <label htmlFor="address" className="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wider">Address</label>
                   <textarea
                     {...register('address')}
                     id="address"
                     rows={3}
-                    placeholder="Full address for equipment delivery"
+                    placeholder="Your full address"
                     className="w-full rounded-xl bg-surface-700 border border-white/5 px-4 py-2.5 text-sm text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-500/50 transition-all resize-none"
                   />
                   {errors.address && <p className="mt-1 text-xs text-red-400">{errors.address.message}</p>}
