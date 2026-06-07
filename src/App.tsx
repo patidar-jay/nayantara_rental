@@ -6,6 +6,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ToastProvider } from '@presentation/shared/Toast';
+import { ThemeProvider } from '@presentation/shared/ThemeContext';
 
 // Customer
 import CustomerLayout from './presentation/customer/CustomerLayout';
@@ -22,6 +23,7 @@ import ProductManagementPage from './presentation/admin/pages/ProductManagementP
 import CategoryManagementPage from './presentation/admin/pages/CategoryManagementPage';
 import BookingManagementPage from './presentation/admin/pages/BookingManagementPage';
 import AvailabilityCalendar from './presentation/admin/pages/AvailabilityCalendar';
+import ThemeCustomizationPage from './presentation/admin/pages/ThemeCustomizationPage';
 
 // ---------------------------------------------------------------------------
 // TanStack Query Client
@@ -44,6 +46,7 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
       <ToastProvider>
       <BrowserRouter>
         <Routes>
@@ -67,6 +70,7 @@ function App() {
             <Route path="categories" element={<CategoryManagementPage />} />
             <Route path="bookings" element={<BookingManagementPage />} />
             <Route path="availability" element={<AvailabilityCalendar />} />
+            <Route path="theme" element={<ThemeCustomizationPage />} />
           </Route>
 
           {/* ============================================================== */}
@@ -86,6 +90,7 @@ function App() {
         </Routes>
       </BrowserRouter>
       </ToastProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
