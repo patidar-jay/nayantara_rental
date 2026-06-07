@@ -41,31 +41,32 @@ const BRAND_PRESETS: ColorPreset[] = [
 const BG_PRESETS: ColorPreset[] = [
   // Dark
   { name: 'Midnight',      hex: '#0a0a0f' },
-  { name: 'Dark Navy',     hex: '#0a0e1a' },
-  { name: 'Deep Space',    hex: '#0d0d12' },
   { name: 'Charcoal',      hex: '#121212' },
-  { name: 'Onyx',          hex: '#141414' },
-  { name: 'Obsidian',      hex: '#0e0e14' },
+  { name: 'Dark Navy',     hex: '#0a0e1a' },
   { name: 'Dark Slate',    hex: '#0f172a' },
-  { name: 'Night Blue',    hex: '#0c1222' },
-  { name: 'Deep Purple',   hex: '#110e1a' },
-  { name: 'Carbon',        hex: '#181818' },
-  { name: 'Dark Olive',    hex: '#0e1210' },
-  { name: 'Warm Black',    hex: '#1a1410' },
-  // Medium
-  { name: 'Graphite',      hex: '#1e1e2e' },
-  { name: 'Dark Gray',     hex: '#252525' },
-  { name: 'Storm',         hex: '#2d2d3d' },
+  // Colorful Dark
+  { name: 'Navy Blue',     hex: '#1e2a4a' },
+  { name: 'Dark Teal',     hex: '#0d3b3e' },
+  { name: 'Dark Green',    hex: '#14352a' },
+  { name: 'Dark Purple',   hex: '#2d1b4e' },
+  { name: 'Dark Maroon',   hex: '#3b1a1a' },
+  { name: 'Dark Brown',    hex: '#2c1810' },
+  // Colorful Medium
+  { name: 'Blue',          hex: '#1a3a5c' },
+  { name: 'Teal',          hex: '#1a4a4a' },
+  { name: 'Green',         hex: '#1a3c2a' },
+  { name: 'Purple',        hex: '#3a2260' },
+  { name: 'Maroon',        hex: '#5c1a1a' },
+  { name: 'Wine',          hex: '#4a1a35' },
+  { name: 'Brown',         hex: '#3e2a1a' },
+  { name: 'Gray',          hex: '#3a3a3a' },
   // Light
   { name: 'White',         hex: '#ffffff' },
-  { name: 'Snow',          hex: '#fafafa' },
-  { name: 'Pearl',         hex: '#f5f5f5' },
-  { name: 'Ivory',         hex: '#f8f7f2' },
   { name: 'Light Gray',    hex: '#f0f0f0' },
   { name: 'Cream',         hex: '#fdf6e3' },
-  { name: 'Lavender',      hex: '#f0eef6' },
-  { name: 'Ice Blue',      hex: '#eff6ff' },
-  { name: 'Mint',          hex: '#f0fdf4' },
+  { name: 'Light Blue',    hex: '#e8f0fe' },
+  { name: 'Light Pink',    hex: '#fce4ec' },
+  { name: 'Light Green',   hex: '#e8f5e9' },
 ];
 
 // ---------------------------------------------------------------------------
