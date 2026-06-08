@@ -2,7 +2,9 @@
 // CategoryManagementPage — Admin category CRUD with live Supabase data
 // ============================================================================
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { supabase } from '@infrastructure/api/supabaseClient';
+import type { Category } from '@core/entities';
 import { useAllCategories, useCreateCategory, useUpdateCategory, useDeleteCategory } from '@hooks';
 import { useToast } from '@presentation/shared/Toast';
 import { cn } from '@utils';
@@ -14,8 +16,12 @@ import { cn } from '@utils';
 export default function CategoryManagementPage() {
   const toast = useToast();
   const [showForm, setShowForm] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [newName, setNewName] = useState('');
   const [newDesc, setNewDesc] = useState('');
+  const [newImage, setNewImage] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { data: categories, isLoading } = useAllCategories();
   const createCategory = useCreateCategory();
@@ -25,21 +31,83 @@ export default function CategoryManagementPage() {
   const slugify = (text: string) =>
     text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
-  const handleCreate = async (e: React.FormEvent) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image is too large (max 5MB)');
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      if (newImage && newImage.includes('/product-media/') && (!editingCategory || newImage !== editingCategory.image_url)) {
+        const urlParts = newImage.split('/product-media/');
+        if (urlParts.length === 2) {
+          supabase.storage.from('product-media').remove([urlParts[1]]).catch(console.error);
+        }
+      }
+
+      const ext = file.name.split('.').pop()?.toLowerCase() ?? 'jpg';
+      const fileName = `categories/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('product-media')
+        .upload(fileName, file, { cacheControl: '3600', upsert: false });
+
+      if (uploadError) throw uploadError;
+
+      const { data: urlData } = supabase.storage.from('product-media').getPublicUrl(fileName);
+      setNewImage(urlData.publicUrl);
+      toast.success('Image uploaded successfully');
+    } catch (err) {
+      toast.error(`Failed to upload image: ${(err as Error).message}`);
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newName.trim()) return;
     try {
-      await createCategory.mutateAsync({
-        name: newName.trim(),
-        slug: slugify(newName.trim()),
-        description: newDesc.trim() || null,
-      });
-      toast.success('Category created');
+      if (editingCategory) {
+        const oldImage = editingCategory.image_url;
+        const newImageUrl = newImage.trim() || null;
+        
+        if (oldImage && oldImage !== newImageUrl && oldImage.includes('/product-media/')) {
+          const urlParts = oldImage.split('/product-media/');
+          if (urlParts.length === 2) {
+            supabase.storage.from('product-media').remove([urlParts[1]]).catch(console.error);
+          }
+        }
+
+        await updateCategory.mutateAsync({
+          id: editingCategory.id,
+          name: newName.trim(),
+          slug: slugify(newName.trim()),
+          description: newDesc.trim() || null,
+          image_url: newImage.trim() || null,
+        });
+        toast.success('Category updated');
+      } else {
+        await createCategory.mutateAsync({
+          name: newName.trim(),
+          slug: slugify(newName.trim()),
+          description: newDesc.trim() || null,
+          image_url: newImage.trim() || null,
+        });
+        toast.success('Category created');
+      }
       setNewName('');
       setNewDesc('');
+      setNewImage('');
+      setEditingCategory(null);
       setShowForm(false);
     } catch (err) {
-      toast.error((err as Error).message ?? 'Failed to create category');
+      toast.error((err as Error).message ?? `Failed to ${editingCategory ? 'update' : 'create'} category`);
     }
   };
 
@@ -52,10 +120,18 @@ export default function CategoryManagementPage() {
     }
   };
 
-  const handleDelete = async (id: string, name: string) => {
+  const handleDelete = async (id: string, name: string, imageUrl: string | null) => {
     if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
     try {
       await deleteCategory.mutateAsync(id);
+
+      if (imageUrl && imageUrl.includes('/product-media/')) {
+        const urlParts = imageUrl.split('/product-media/');
+        if (urlParts.length === 2) {
+          supabase.storage.from('product-media').remove([urlParts[1]]).catch(console.error);
+        }
+      }
+
       toast.success(`"${name}" deleted`);
     } catch (err) {
       const message = (err as Error).message ?? '';
@@ -79,7 +155,17 @@ export default function CategoryManagementPage() {
         </div>
         <button
           type="button"
-          onClick={() => setShowForm(!showForm)}
+          onClick={() => {
+            if (showForm) {
+              setShowForm(false);
+              setEditingCategory(null);
+              setNewName('');
+              setNewDesc('');
+              setNewImage('');
+            } else {
+              setShowForm(true);
+            }
+          }}
           className={cn(
             'inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-all',
             showForm
@@ -101,10 +187,10 @@ export default function CategoryManagementPage() {
         </button>
       </div>
 
-      {/* Add Form */}
+      {/* Add/Edit Form */}
       {showForm && (
-        <form onSubmit={handleCreate} className="rounded-2xl bg-surface border border-primary/20 p-6 space-y-4">
-          <h3 className="text-base font-semibold text-text">New Category</h3>
+        <form onSubmit={handleSubmit} className="rounded-2xl bg-surface border border-primary/20 p-6 space-y-4">
+          <h3 className="text-base font-semibold text-text">{editingCategory ? 'Edit Category' : 'New Category'}</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="cat_name" className="block text-xs font-medium text-text-muted mb-1.5 uppercase tracking-wider">Name</label>
@@ -131,18 +217,62 @@ export default function CategoryManagementPage() {
                 className="w-full rounded-xl bg-surface border border-border px-4 py-2.5 text-sm text-text placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
               />
             </div>
+            <div className="sm:col-span-2">
+              <label htmlFor="cat_image" className="block text-xs font-medium text-text-muted mb-1.5 uppercase tracking-wider">Image / Icon</label>
+              <div className="flex gap-2">
+                <input
+                  id="cat_image"
+                  type="text"
+                  value={newImage}
+                  onChange={(e) => setNewImage(e.target.value)}
+                  placeholder="Image URL or Font Icon Class (e.g. fa fa-star)"
+                  className="flex-1 rounded-xl bg-surface border border-border px-4 py-2.5 text-sm text-text placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={handleFileUpload}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isUploading}
+                  className="rounded-xl border border-border bg-surface hover:bg-surface/80 px-4 py-2.5 text-sm font-medium text-text transition-all whitespace-nowrap flex items-center gap-2 disabled:opacity-50"
+                >
+                  {isUploading ? (
+                    <>
+                      <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                      Uploading...
+                    </>
+                  ) : (
+                    <>
+                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" /></svg>
+                      Upload
+                    </>
+                  )}
+                </button>
+              </div>
+              <p className="mt-1 text-xs text-text-muted">You can upload an image or manually enter an image URL / font class name.</p>
+              {newImage && newImage.startsWith('http') && (
+                <div className="mt-2 h-16 w-16 rounded-lg overflow-hidden border border-border">
+                  <img src={newImage} alt="Preview" className="h-full w-full object-cover" />
+                </div>
+              )}
+            </div>
           </div>
           <button
             type="submit"
-            disabled={!newName.trim() || createCategory.isPending}
+            disabled={!newName.trim() || createCategory.isPending || updateCategory.isPending}
             className="rounded-xl bg-primary px-6 py-2.5 text-sm font-semibold text-text hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2"
           >
-            {createCategory.isPending ? (
+            {createCategory.isPending || updateCategory.isPending ? (
               <>
                 <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
-                Creating...
+                Saving...
               </>
-            ) : 'Create Category'}
+            ) : editingCategory ? 'Save Changes' : 'Create Category'}
           </button>
         </form>
       )}
@@ -201,7 +331,22 @@ export default function CategoryManagementPage() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => handleDelete(cat.id, cat.name)}
+                    onClick={() => {
+                      setEditingCategory(cat);
+                      setNewName(cat.name);
+                      setNewDesc(cat.description || '');
+                      setNewImage(cat.image_url || '');
+                      setShowForm(true);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    disabled={updateCategory.isPending}
+                    className="rounded-lg border border-primary/20 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/10 disabled:opacity-50 transition-all"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(cat.id, cat.name, cat.image_url)}
                     disabled={deleteCategory.isPending}
                     className="rounded-lg border border-red-500/20 px-3 py-1.5 text-xs font-medium text-red-400 hover:bg-red-500/10 disabled:opacity-50 transition-all"
                   >

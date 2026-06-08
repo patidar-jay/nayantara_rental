@@ -1,120 +1,128 @@
 // ============================================================================
-// HomePage — Customer landing page with live data
+// HomePage — Matches reference images 1-3
+// Hero + Stats + Categories + Trending + How It Works + CTA + Trust
 // ============================================================================
 
 import { Link } from 'react-router-dom';
-import { useFeaturedProducts, useCategories } from '@hooks';
-import { formatCurrency, cn } from '@utils';
-import ProductCard from '../components/ProductCard';
-import { ProductCardSkeletonGrid } from '../components/ProductCardSkeleton';
+import { useCategories, useFeaturedProducts } from '@hooks';
+import ProductCard, { ProductCardSkeleton } from '../components/ProductCard';
+import TrustBadges from '../components/TrustBadges';
+import { cn } from '@utils';
 
 // ---------------------------------------------------------------------------
-// Static Content
+// Category Icons (matching reference gold outlined icons)
 // ---------------------------------------------------------------------------
 
-const BENEFITS = [
-  {
-    icon: (
-      <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-      </svg>
-    ),
-    title: 'Premium Collection',
-    description: 'Every dress is professionally dry-cleaned, inspected, and perfectly maintained before each rental.',
-  },
-  {
-    icon: (
-      <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.15c0 .415.336.75.75.75z" />
-      </svg>
-    ),
-    title: 'Visit Our Store',
-    description: 'Walk in to our store, try on outfits in person, and pick the perfect look for your occasion.',
-  },
-  {
-    icon: (
-      <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    ),
-    title: 'Transparent Pricing',
-    description: 'No hidden fees. Simple per-day pricing with upfront total calculations before you book.',
-  },
-  {
-    icon: (
-      <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
-      </svg>
-    ),
-    title: '24/7 Support',
-    description: 'Round-the-clock support via phone and WhatsApp. We\'re always here to help.',
-  },
-];
-
-const CATEGORY_EMOJIS: Record<string, string> = {
-  'lehenga': '👗',
-  'saree': '🥻',
-  'gown': '✨',
-  'sherwani': '🤵',
-  'suit': '👔',
-  'bridal': '💍',
-  'kids': '🧒',
-  'accessories': '👜',
-  'jewellery': '💎',
-  'western': '👠',
-  'ethnic': '🪷',
-  'party-wear': '🎉',
+const CATEGORY_ICONS: Record<string, React.ReactNode> = {
+  default: (
+    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+    </svg>
+  ),
 };
+
+// ---------------------------------------------------------------------------
+// How It Works Steps
+// ---------------------------------------------------------------------------
+
+const STEPS = [
+  {
+    icon: (
+      <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+      </svg>
+    ),
+    title: '1. Choose Outfit',
+    desc: 'Browse & select your favorite outfit',
+  },
+  {
+    icon: (
+      <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+      </svg>
+    ),
+    title: '2. Select Date',
+    desc: 'Pick your rental dates',
+  },
+  {
+    icon: (
+      <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+      </svg>
+    ),
+    title: '3. Confirm Booking',
+    desc: 'Secure your booking with easy payment',
+  },
+  {
+    icon: (
+      <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+      </svg>
+    ),
+    title: '4. Receive & Shine',
+    desc: 'Get your outfit delivered & shine on your day',
+  },
+] as const;
+
+// ---------------------------------------------------------------------------
+// Stats
+// ---------------------------------------------------------------------------
+
+const STATS = [
+  { icon: '👤', value: '500+', label: 'Happy Customers' },
+  { icon: '👗', value: '200+', label: 'Dresses' },
+  { icon: '⭐', value: '4.9★', label: 'Avg. Rating' },
+  { icon: '🔒', value: '100%', label: 'Secure Payments' },
+] as const;
 
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
 export default function HomePage() {
-  const { data: featuredProducts, isLoading: loadingFeatured } = useFeaturedProducts(6);
-  const { data: categories, isLoading: loadingCategories } = useCategories();
+  const { data: categories, isLoading: catLoading } = useCategories();
+  const { data: featured, isLoading: featLoading } = useFeaturedProducts();
 
   return (
-    <div>
-      {/* ================================================================== */}
-      {/* Hero Section                                                        */}
-      {/* ================================================================== */}
-      <section className="relative overflow-hidden py-20 sm:py-32">
-        {/* Background decoration */}
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-background to-background" />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-primary/8 rounded-full blur-3xl" />
-          <div
-            className="absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)',
-              backgroundSize: '24px 24px',
-            }}
+    <div className="animate-fadeIn">
+      {/* ================================================================= */}
+      {/* HERO SECTION                                                       */}
+      {/* ================================================================= */}
+      <section className="relative min-h-[85vh] sm:min-h-[70vh] flex items-end overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img
+            src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=1200&q=80"
+            alt="Designer bridal outfit"
+            className="w-full h-full object-cover object-top"
           />
+          {/* Dark gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/20" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/80 to-transparent" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-4 py-1.5 mb-8">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary pulse-soft" />
-            <span className="text-xs font-medium text-primary">Trusted by 500+ customers</span>
+        {/* Hero Content */}
+        <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 pb-8 sm:pb-12 max-w-7xl mx-auto">
+          {/* Trust Pill */}
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/15 border border-primary/20 px-3 py-1.5 mb-4">
+            <span className="text-primary text-xs">✦</span>
+            <span className="text-xs text-primary font-medium">Trusted by 500+ customers</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-text leading-tight">
-            Rent Designer Dresses
-            <br />
-            <span className="gradient-text">for Every Occasion</span>
+          <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-text leading-[1.1]">
+            Rent Designer<br />Dresses<br />
+            <span className="text-primary">for Every Occasion</span>
           </h1>
 
-          <p className="mt-6 max-w-2xl mx-auto text-lg text-text-muted leading-relaxed">
-            From bridal lehengas to party gowns — rent stunning outfits delivered to your doorstep. Look your best without buying. Simple booking, transparent pricing.
+          <p className="mt-4 text-sm sm:text-base text-text-muted max-w-md leading-relaxed">
+            From bridal lehengas to party gowns — rent stunning outfits delivered to your doorstep. Look your best without buying.
           </p>
 
-          {/* CTAs */}
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+          {/* CTA Buttons */}
+          <div className="mt-6 flex flex-col sm:flex-row gap-3 max-w-xs">
             <Link
               to="/products"
-              className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-3.5 text-sm font-semibold text-text hover:opacity-90 transition-all hover:shadow-lg hover:shadow-primary/25"
+              className="flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-background hover:opacity-90 transition-opacity"
             >
               Browse Collection
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -123,181 +131,198 @@ export default function HomePage() {
             </Link>
             <Link
               to="/track"
-              className="inline-flex items-center gap-2 rounded-xl border border-border px-8 py-3.5 text-sm font-semibold text-text-muted hover:bg-surface hover:text-text transition-all"
+              className="flex items-center justify-center gap-2 rounded-lg border border-primary/40 px-6 py-3 text-sm font-medium text-text hover:bg-primary/5 transition-colors"
             >
               Track Your Booking
             </Link>
           </div>
-
-          {/* Stats */}
-          <div className="mt-16 grid grid-cols-3 gap-8 max-w-md mx-auto">
-            <div>
-              <p className="text-2xl sm:text-3xl font-bold text-text">500+</p>
-              <p className="text-xs text-text-muted mt-1">Happy Customers</p>
-            </div>
-            <div>
-              <p className="text-2xl sm:text-3xl font-bold text-text">200+</p>
-              <p className="text-xs text-text-muted mt-1">Dresses</p>
-            </div>
-            <div>
-              <p className="text-2xl sm:text-3xl font-bold text-text">4.9★</p>
-              <p className="text-xs text-text-muted mt-1">Avg Rating</p>
-            </div>
-          </div>
         </div>
       </section>
 
-      {/* ================================================================== */}
-      {/* Categories Section                                                   */}
-      {/* ================================================================== */}
-      <section className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-text">Browse by Category</h2>
-            <p className="mt-3 text-text-muted max-w-lg mx-auto">
-              Find the perfect outfit for your occasion
-            </p>
-          </div>
-
-          {loadingCategories ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="rounded-2xl bg-surface p-6 text-center skeleton h-32" />
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-              {(categories ?? []).map((cat) => (
-                <Link
-                  key={cat.id}
-                  to={`/products?category=${cat.slug}`}
-                  className="group rounded-2xl bg-surface p-6 text-center hover:bg-surface transition-all card-lift"
-                >
-                  <span className="text-3xl block mb-3">
-                    {CATEGORY_EMOJIS[cat.slug] ?? '📦'}
-                  </span>
-                  <h3 className="text-sm font-semibold text-text group-hover:text-primary transition-colors">
-                    {cat.name}
-                  </h3>
-                </Link>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* ================================================================== */}
-      {/* Featured Products                                                    */}
-      {/* ================================================================== */}
-      <section className="py-20 bg-background/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-end justify-between mb-12">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full bg-accent-500/10 border border-accent-500/20 px-3 py-1 mb-3">
-                <span className="text-xs font-medium text-accent-400">⭐ Featured</span>
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-text">Trending Outfits</h2>
-              <p className="mt-2 text-text-muted">Most rented dresses this month</p>
-            </div>
-            <Link
-              to="/products"
-              className="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary transition-colors"
-            >
-              View all
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-              </svg>
-            </Link>
-          </div>
-
-          {loadingFeatured ? (
-            <ProductCardSkeletonGrid count={6} />
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {(featuredProducts ?? []).map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          )}
-
-          {/* Mobile view-all link */}
-          <div className="mt-8 text-center sm:hidden">
-            <Link
-              to="/products"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary transition-colors"
-            >
-              View all products →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ================================================================== */}
-      {/* Benefits Section                                                     */}
-      {/* ================================================================== */}
-      <section className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-text">Why Choose Nayantara?</h2>
-            <p className="mt-3 text-text-muted max-w-lg mx-auto">
-              We make renting designer outfits easy, reliable, and affordable.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {BENEFITS.map((b) => (
-              <div
-                key={b.title}
-                className="rounded-2xl bg-surface p-6 transition-all hover:bg-surface/60"
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/15 text-primary mb-4">
-                  {b.icon}
-                </div>
-                <h3 className="text-base font-semibold text-text mb-2">{b.title}</h3>
-                <p className="text-sm text-text-muted leading-relaxed">{b.description}</p>
+      {/* ================================================================= */}
+      {/* STATS BAR                                                          */}
+      {/* ================================================================= */}
+      <section className="px-4 sm:px-6 lg:px-8 -mt-2 relative z-10 max-w-7xl mx-auto">
+        <div className="rounded-2xl bg-surface border border-border p-4 sm:p-5">
+          <div className="grid grid-cols-4 divide-x divide-border">
+            {STATS.map((stat) => (
+              <div key={stat.label} className="flex flex-col items-center text-center px-2">
+                <span className="text-lg sm:text-xl font-bold text-text">{stat.value}</span>
+                <span className="text-[9px] sm:text-xs text-text-muted mt-0.5">{stat.label}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ================================================================== */}
-      {/* Contact CTA                                                          */}
-      {/* ================================================================== */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden rounded-3xl bg-primary px-8 py-16 sm:px-16 text-center">
-            <div
-              className="absolute inset-0 opacity-10"
-              style={{
-                backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)',
-                backgroundSize: '20px 20px',
-              }}
-            />
-            <div className="relative z-10">
-              <h2 className="text-3xl sm:text-4xl font-bold text-text">
-                Ready to Rent?
-              </h2>
-              <p className="mt-4 text-lg text-text/80 max-w-lg mx-auto">
-                Get in touch or browse our collection to find your perfect outfit.
-              </p>
-              <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link
-                  to="/products"
-                  className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-background hover:bg-surface transition-colors"
-                >
-                  Browse Collection
-                </Link>
-                <a
-                  href="tel:+919876543210"
-                  className="inline-flex items-center gap-2 rounded-xl border border-border px-8 py-3.5 text-sm font-semibold text-text hover:bg-surface transition-colors"
-                >
-                  📞 Call Us
-                </a>
+      {/* ================================================================= */}
+      {/* BROWSE BY CATEGORY                                                 */}
+      {/* ================================================================= */}
+      <section className="mt-10 sm:mt-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="flex items-end justify-between mb-5">
+          <div>
+            <h2 className="font-heading text-xl sm:text-2xl lg:text-3xl font-bold text-text">Browse by Category</h2>
+            <p className="text-xs sm:text-sm text-text-muted mt-1">Find the perfect outfit for your occasion</p>
+          </div>
+          <Link to="/products" className="text-xs sm:text-sm text-primary font-medium flex items-center gap-1 hover:opacity-80 transition-opacity shrink-0">
+            View all
+            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </Link>
+        </div>
+
+        {catLoading ? (
+          <div className="grid grid-cols-3 gap-3 sm:gap-4">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="aspect-[3/4] rounded-xl skeleton" />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-3 gap-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-6">
+            {(categories ?? []).map((cat) => (
+              <Link
+                key={cat.id}
+                to={`/products?category=${cat.slug}`}
+                className="group relative rounded-xl overflow-hidden aspect-[3/4] bg-surface border border-border card-lift"
+              >
+                {/* Category Image */}
+                <img
+                  src={cat.image_url || `https://placehold.co/300x400/1A1A24/C8A96B?text=${encodeURIComponent(cat.name)}`}
+                  alt={cat.name}
+                  loading="lazy"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+
+                {/* Category Icon */}
+                <div className="absolute top-3 left-3 flex h-8 w-8 items-center justify-center rounded-lg bg-primary/20 text-primary border border-primary/30">
+                  {CATEGORY_ICONS.default}
+                </div>
+
+                {/* Category Info */}
+                <div className="absolute bottom-0 left-0 right-0 p-3">
+                  <p className="text-sm font-semibold text-text">{cat.name}</p>
+                  <p className="text-[10px] text-text-muted mt-0.5">{cat.description || 'Premium collection'}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* ================================================================= */}
+      {/* TRENDING OUTFITS — Horizontal scroll                               */}
+      {/* ================================================================= */}
+      <section className="mt-10 sm:mt-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="flex items-end justify-between mb-5">
+          <div>
+            <h2 className="font-heading text-xl sm:text-2xl lg:text-3xl font-bold text-text">Trending Outfits</h2>
+            <p className="text-xs sm:text-sm text-text-muted mt-1">Most loved outfits this season</p>
+          </div>
+          <Link to="/products" className="text-xs sm:text-sm text-primary font-medium flex items-center gap-1 hover:opacity-80 transition-opacity shrink-0">
+            View all
+            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </Link>
+        </div>
+
+        {featLoading ? (
+          <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="w-36 sm:w-44 shrink-0">
+                <ProductCardSkeleton compact />
               </div>
+            ))}
+          </div>
+        ) : (
+          <>
+            {/* Mobile — horizontal scroll */}
+            <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2 lg:hidden">
+              {(featured ?? []).map((product) => (
+                <div key={product.id} className="w-36 sm:w-44 shrink-0">
+                  <ProductCard product={product} compact />
+                </div>
+              ))}
             </div>
+            {/* Desktop — grid */}
+            <div className="hidden lg:grid grid-cols-4 xl:grid-cols-5 gap-4">
+              {(featured ?? []).slice(0, 5).map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </>
+        )}
+      </section>
+
+      {/* ================================================================= */}
+      {/* HOW IT WORKS                                                       */}
+      {/* ================================================================= */}
+      <section className="mt-10 sm:mt-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <h2 className="font-heading text-xl sm:text-2xl lg:text-3xl font-bold text-text mb-6">How It Works</h2>
+
+        <div className="flex items-start gap-0 overflow-x-auto no-scrollbar pb-2">
+          {STEPS.map((step, idx) => (
+            <div key={step.title} className="flex items-start shrink-0">
+              {/* Step */}
+              <div className="flex flex-col items-center text-center w-28 sm:w-36">
+                <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full border-2 border-primary/30 text-primary">
+                  {step.icon}
+                </div>
+                <p className="text-xs sm:text-sm font-semibold text-text mt-3">{step.title}</p>
+                <p className="text-[10px] sm:text-xs text-text-muted mt-1 px-1">{step.desc}</p>
+              </div>
+              {/* Dashed connector */}
+              {idx < STEPS.length - 1 && (
+                <div className="flex items-center h-14 sm:h-16 mx-1 sm:mx-2">
+                  <div className="w-10 sm:w-14 border-t-2 border-dashed border-primary/30" />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ================================================================= */}
+      {/* CTA BANNER                                                         */}
+      {/* ================================================================= */}
+      <section className="mt-10 sm:mt-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="relative rounded-2xl overflow-hidden bg-surface border border-border min-h-[220px] sm:min-h-[260px] flex items-center">
+          {/* Background image */}
+          <img
+            src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800&q=60"
+            alt="Luxury outfit"
+            className="absolute right-0 top-0 h-full w-1/2 object-cover object-center hidden sm:block"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-surface via-surface/95 to-surface/30 sm:to-transparent" />
+
+          <div className="relative z-10 p-6 sm:p-8 max-w-md">
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-text leading-tight">
+              Luxury Outfits,<br />
+              <span className="text-primary">Unforgettable Moments</span>
+            </h2>
+            <p className="text-sm text-text-muted mt-2">
+              Rent premium designer outfits for weddings, parties & more.
+            </p>
+            <Link
+              to="/products"
+              className="inline-flex items-center gap-2 mt-4 rounded-lg border border-primary/40 px-5 py-2.5 text-sm font-medium text-text hover:bg-primary/10 transition-colors"
+            >
+              Browse Collection
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </Link>
           </div>
         </div>
+      </section>
+
+      {/* ================================================================= */}
+      {/* TRUST BADGES                                                       */}
+      {/* ================================================================= */}
+      <section className="mt-10 sm:mt-14 mb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <TrustBadges />
       </section>
     </div>
   );

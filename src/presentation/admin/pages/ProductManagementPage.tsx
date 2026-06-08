@@ -94,7 +94,12 @@ export default function ProductManagementPage() {
       await deleteProduct.mutateAsync(product.id);
       toast.success(`"${product.name}" deleted`);
     } catch (err) {
-      toast.error((err as Error).message ?? 'Failed to delete product');
+      const message = (err as Error).message ?? '';
+      if (message.includes('booking_items_product_id_fkey') || message.includes('foreign key') || message.includes('violates')) {
+        toast.error(`Cannot delete "${product.name}" because it has existing bookings. Please mark it as 'Inactive' instead.`);
+      } else {
+        toast.error(message || 'Failed to delete product');
+      }
     }
   };
 

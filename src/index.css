@@ -2,7 +2,7 @@
 
 /* ============================================================================
    Nayantara Rentals — Design System
-   Inspired by Airbnb / Stripe / Linear aesthetics
+   Premium dark luxury boutique aesthetic
    ============================================================================ */
 
 @theme {
@@ -16,8 +16,9 @@
   /* Derived Text Colors */
   --color-text-muted: color-mix(in srgb, var(--theme-text, #FFFFFF) 70%, transparent);
 
-  /* Font */
+  /* Fonts */
   --font-sans: 'Inter', 'system-ui', -apple-system, sans-serif;
+  --font-heading: 'Playfair Display', 'Georgia', serif;
 }
 
 /* Base Resets */
@@ -31,6 +32,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-background);
   color: var(--color-text);
+}
+
+/* Heading font utility */
+.font-heading {
+  font-family: var(--font-heading);
 }
 
 /* Glassmorphism utility */
@@ -90,6 +96,7 @@ body {
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: var(--color-background);
@@ -100,4 +107,27 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: color-mix(in srgb, var(--color-surface) 80%, white);
+}
+
+/* Hide scrollbar for horizontal scroll containers */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-out both;
+}
+
+/* Safe area padding for bottom nav */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }

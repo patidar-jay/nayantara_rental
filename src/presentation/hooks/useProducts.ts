@@ -76,7 +76,7 @@ export function useProducts(filters: ProductFilters = {}) {
       let query = supabase
         .from('products')
         .select(
-          `*, category:categories ( id, name, slug )`,
+          `*, category:categories ( id, name, slug ), media:product_media ( id, media_url, sort_order )`,
           { count: 'exact' },
         )
         .order('sort_order', { ascending: true });
@@ -143,7 +143,7 @@ export function useFeaturedProducts(limit = 6) {
     queryFn: async (): Promise<ProductWithCategory[]> => {
       const { data, error } = await supabase
         .from('products')
-        .select(`*, category:categories ( id, name, slug )`)
+        .select(`*, category:categories ( id, name, slug ), media:product_media ( id, media_url, sort_order )`)
         .eq('is_featured', true)
         .eq('status', 'active')
         .order('sort_order', { ascending: true })
@@ -174,7 +174,7 @@ export function useProductsByCategory(categorySlug: string | undefined) {
 
       const { data, error } = await supabase
         .from('products')
-        .select(`*, category:categories ( id, name, slug )`)
+        .select(`*, category:categories ( id, name, slug ), media:product_media ( id, media_url, sort_order )`)
         .eq('category_id', category.id)
         .eq('status', 'active')
         .order('sort_order', { ascending: true });

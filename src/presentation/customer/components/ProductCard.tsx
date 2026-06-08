@@ -1,136 +1,104 @@
 // ============================================================================
-// ProductCard — Premium product card for the customer listing grid
-// Airbnb-inspired card on dark theme with hover lift animations
+// ProductCard — Reference-accurate product card
+// Shows: image with heart icon, product name, ₹price/day, ★ rating
 // ============================================================================
 
 import { Link } from 'react-router-dom';
-import type { Product, ProductMedia } from '@core/entities';
-import { formatCurrency, truncate, cn } from '@utils';
-
-// ---------------------------------------------------------------------------
-// Props
-// ---------------------------------------------------------------------------
+import type { ProductWithCategory } from '@core/entities';
+import { formatCurrency, cn } from '@utils';
 
 interface ProductCardProps {
-  product: Product & { media?: ProductMedia[]; category?: { name: string } };
+  product: ProductWithCategory;
+  className?: string;
+  /** If true, renders as a compact card (used in horizontal scroll) */
+  compact?: boolean;
 }
 
-// ---------------------------------------------------------------------------
-// Camera placeholder icon (shown when no product media is available)
-// ---------------------------------------------------------------------------
-
-function CameraIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-12 w-12 text-text-muted"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth={1.2}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M3 7a2 2 0 012-2h2.22a2 2 0 001.66-.9l.26-.39A2 2 0 0110.82 3h2.36a2 2 0 011.68.91l.26.39a2 2 0 001.66.9H19a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"
-      />
-      <circle cx="12" cy="12" r="3.5" />
-    </svg>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// ProductCard Component
-// ---------------------------------------------------------------------------
-
-function ProductCard({ product }: ProductCardProps) {
-  // Resolve the primary image from sorted media
-  const primaryImage = product.media
-    ?.slice()
-    .sort((a, b) => a.sort_order - b.sort_order)[0];
+export default function ProductCard({ product, className, compact }: ProductCardProps) {
+  // Use first media image or fallback
+  const imageUrl = (product as any).media?.[0]?.media_url
+    ?? `https://placehold.co/400x500/1A1A24/C8A96B?text=${encodeURIComponent(product.name)}`;
 
   return (
     <Link
       to={`/products/${product.slug}`}
       className={cn(
-        'group block rounded-2xl overflow-hidden bg-surface card-lift',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40',
+        'group block rounded-xl overflow-hidden bg-surface border border-border card-lift',
+        className
       )}
-      aria-label={`View details for ${product.name}`}
     >
-      {/* ---------------------------------------------------------------- */}
-      {/* Image Area                                                       */}
-      {/* ---------------------------------------------------------------- */}
-      <div className="relative aspect-[4/3] overflow-hidden">
-        {primaryImage ? (
-          <img
-            src={primaryImage.media_url}
-            alt={primaryImage.alt_text ?? product.name}
-            loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        ) : (
-          /* Gradient placeholder when no media exists */
-          <div className="flex h-full w-full items-center justify-center bg-surface">
-            <CameraIcon />
-          </div>
-        )}
+      {/* Image Container */}
+      <div className={cn(
+        'relative overflow-hidden',
+        compact ? 'aspect-[3/4]' : 'aspect-[3/4]'
+      )}>
+        <img
+          src={imageUrl}
+          alt={product.name}
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
 
-        {/* Category badge (top-left) */}
-        {product.category?.name && (
-          <span className="absolute top-3 left-3 glass rounded-full px-3 py-1 text-xs font-medium text-text-muted select-none">
-            {product.category.name}
-          </span>
-        )}
+        {/* Heart/Wishlist Button (decorative) */}
+        <button
+          type="button"
+          onClick={(e) => e.preventDefault()}
+          className="absolute top-2.5 right-2.5 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 backdrop-blur-sm text-white hover:text-primary transition-colors"
+          aria-label="Add to wishlist"
+        >
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+          </svg>
+        </button>
       </div>
 
-      {/* ---------------------------------------------------------------- */}
-      {/* Card Body                                                        */}
-      {/* ---------------------------------------------------------------- */}
-      <div className="flex flex-col gap-2 p-5">
-        {/* Product name */}
-        <h3 className="text-lg font-semibold text-text line-clamp-1">
+      {/* Card Info */}
+      <div className="p-3">
+        <h3 className={cn(
+          'font-medium text-text truncate',
+          compact ? 'text-xs' : 'text-sm'
+        )}>
           {product.name}
         </h3>
 
-        {/* Truncated description */}
-        {product.description && (
-          <p className="text-sm leading-relaxed text-text-muted line-clamp-2">
-            {truncate(product.description, 80)}
-          </p>
-        )}
-
-        {/* Price + Availability row */}
-        <div className="mt-1 flex items-end justify-between">
-          <div>
-            <span className="text-xl font-bold text-primary">
-              {formatCurrency(product.rental_price_per_day)}
-            </span>
-            <span className="ml-1 text-sm text-text-muted">/day</span>
-          </div>
-
-          <span className="text-xs text-text-muted">
-            {product.total_quantity} {product.total_quantity === 1 ? 'unit' : 'units'}
+        <div className="flex items-baseline gap-1 mt-1">
+          <span className={cn(
+            'font-semibold text-primary',
+            compact ? 'text-xs' : 'text-sm'
+          )}>
+            {formatCurrency(product.rental_price_per_day)}
           </span>
+          <span className="text-[10px] text-text-muted">/day</span>
         </div>
 
-        {/* View Details link */}
-        <span className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary transition-colors group-hover:text-primary">
-          View Details
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4 translate-x-0 transition-transform duration-200 group-hover:translate-x-1"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        {/* Rating (static — no ratings table yet) */}
+        <div className="flex items-center gap-1 mt-1">
+          <svg className="h-3 w-3 text-primary" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
-        </span>
+          <span className="text-[10px] text-text-muted">
+            4.{Math.floor(Math.random() * 3) + 6}
+          </span>
+        </div>
       </div>
     </Link>
   );
 }
 
-export default ProductCard;
+// ---------------------------------------------------------------------------
+// Skeleton
+// ---------------------------------------------------------------------------
+
+export function ProductCardSkeleton({ compact }: { compact?: boolean }) {
+  return (
+    <div className="rounded-xl overflow-hidden bg-surface border border-border">
+      <div className={cn('skeleton', compact ? 'aspect-[3/4]' : 'aspect-[3/4]')} />
+      <div className="p-3 space-y-2">
+        <div className="h-3.5 w-3/4 skeleton rounded" />
+        <div className="h-3 w-1/2 skeleton rounded" />
+        <div className="h-2.5 w-1/3 skeleton rounded" />
+      </div>
+    </div>
+  );
+}
